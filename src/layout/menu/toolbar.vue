@@ -13,6 +13,7 @@ import Node from 'element-plus/es/components/cascader-panel/src/node.mjs';
   
   const handleNodeClick = (data: Tree,node:Node) => {
       if(!node.isLeaf) return
+      console.log(data)
   }
   
   const data: Tree[] = [

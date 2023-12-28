@@ -2,7 +2,6 @@
   "name": "vite-project",
   "private": true,
   "version": "0.0.0",
-  "type": "module",
   "scripts": {
     "dev": "vite",
     "build": "vue-tsc && vite build",
@@ -23,6 +22,8 @@
     "@typescript-eslint/eslint-plugin": "^6.13.1",
     "@typescript-eslint/parser": "^6.13.1",
     "@vitejs/plugin-vue": "^4.5.0",
+    "electron": "^28.1.0",
+    "electron-builder": "^24.9.1",
     "eslint-plugin-vue": "^9.19.2",
     "mockjs": "^1.1.0",
     "postcss": "^8.4.32",
