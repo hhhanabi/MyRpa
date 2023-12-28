@@ -1,4 +1,4 @@
-import { app, BrowserWindow } from 'electron'
+import { app, BrowserWindow,ipcMain } from 'electron'
 
 // 等待Electron应用就绪后创建BrowserWindow窗口
 app.whenReady().then(async () => {
@@ -13,7 +13,17 @@ app.whenReady().then(async () => {
             webSecurity: false, // 禁用web安全策略
         }
     })
+    ipcMain.on('min', () => win.minimize());
+    ipcMain.on('max', () => {
+        if (win.isMaximized()) {
+            win.restore();
+        } else {
+            win.maximize()
+        }
 
+    });
+    ipcMain.on('close', () => win.close());
+    ipcMain.on('refresh', () => win.reload());
     // 根据命令行参数加载URL或本地文件
     if (process.argv[2]) {
         win.loadURL(process.argv[2])

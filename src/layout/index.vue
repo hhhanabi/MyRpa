@@ -41,6 +41,7 @@ let userStore=useUserStore()
     .slider{
         width: 260px;
         height: 100%;
+        background-color: white;
     }
     .tabbar{
         width: 100%;
@@ -65,6 +66,9 @@ let userStore=useUserStore()
 html.dark{
     .container{
         background-color: black;
+        .slider{
+            background-color: black;
+        }
     }
     .main{
         background-color: black;
