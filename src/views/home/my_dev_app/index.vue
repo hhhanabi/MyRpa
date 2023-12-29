@@ -7,7 +7,7 @@
                         <span>我开发的应用</span>
                         <el-button icon="Plus" type="danger" round @click="dialogVisible = !dialogVisible">新建应用</el-button>
                     </div>
-                    <el-input v-model="keyword" placeholder="搜索应用" @blur="getFilterApps" @keyup.enter="getFilterApps"/>
+                    <el-input v-model="keyword" placeholder="搜索应用" @blur="getFilterApps" @keyup.enter="getFilterApps" />
                 </div>
             </template>
             <el-table :data="filterApps" style="width: 100%">
@@ -16,11 +16,11 @@
                 <el-table-column label="应用描述" prop="description"></el-table-column>
                 <el-table-column label="更新时间" prop="updated_time">
                 </el-table-column>
-                <el-table-column  label="操作" width="300px">
+                <el-table-column label="操作" width="300px">
                     <template #="{ row }">
                         <el-button icon="VideoPlay" circle />
-                        <el-button icon="Edit" circle @click="editApp"/>
-                        <el-button icon="Delete" circle @click="deleteApp(row.name)"/>
+                        <el-button icon="Edit" circle @click="editApp" />
+                        <el-button icon="Delete" circle @click="deleteApp(row.name)" />
                     </template>
                 </el-table-column>
             </el-table>
@@ -36,9 +36,9 @@
             </el-form>
             <template #footer>
                 <span class="dialog-footer">
-                    <el-button @click="dialogVisible = false">Cancel</el-button>
+                    <el-button @click="dialogVisible = false">取消</el-button>
                     <el-button type="primary" @click="addApp">
-                        Confirm
+                        确定
                     </el-button>
                 </span>
             </template>
@@ -48,82 +48,80 @@
 
 <script lang="ts" setup>
 import { app } from '@/api/app/type';
-import {  onMounted, ref } from 'vue';
+import { onMounted, ref } from 'vue';
 import useLayoutStore from '@/store/modules/layout';
 import { useRouter } from 'vue-router'
-
+import { ElNotification } from 'element-plus';
+const fs = require('fs')
 const $router = useRouter()
 
 let dialogVisible = ref<boolean>(false)
 let keyword = ref<string>();
-// let pageNo = ref<number>(1);
-// //每一页展示多少条数据
-// let limit = ref<number>(5);
-// //数据总数
-// let total = ref<number>(0);
-//存储已有应用的数据
+
 let totalApps = ref<app[]>([]);
 
 let filterApps = ref<app[]>([]);
 
-// const getHasApps = async (pager = 1) => {
-//     //当前页码
-//     pageNo.value = pager;
-//     let result: any = await reqHasApps(pageNo.value, limit.value);
-//     if (result.code == 200) {
-
-//         total.value = result.data.total;
-//         totalApps.value = result.data.records;
-//     }
-// }
-// //组件挂载完毕钩子---发一次请求,获取第一页、一页三个已有应用数据
-
-const getFilterApps = ()=>{
-    if(!keyword.value){
-        filterApps.value=totalApps.value
+const getFilterApps = () => {
+    if (!keyword.value) {
+        filterApps.value = totalApps.value
         return
     }
-    else{
-        filterApps.value = totalApps.value.filter(v=>v.name.includes(keyword.value as string))
+    else {
+        filterApps.value = totalApps.value.filter(v => v.name.includes(keyword.value as string))
     }
 }
 const appInfo = ref<app>({
-    name:'',
-    description:'',
-    updated_time:''
+    name: '',
+    description: '',
+    updated_time: ''
 })
-const addApp = ()=>{
+const addApp = () => {
+    try {
+        fs.mkdirSync(`${appInfo.value.name}`)
+        fs.writeFileSync(`./${appInfo.value.name}/${appInfo.value.name}.py`, '')
+        fs.writeFileSync(`./${appInfo.value.name}/description.txt`, `${appInfo.value.description}`)
+    } catch (error) {
+        ElNotification({
+            type: 'error',
+            message: (error as NodeJS.ErrnoException).message
+        })
+        return
+    }
+    ElNotification({
+        type: 'success',
+        message:'创建成功'
+    })
     totalApps.value.push(appInfo.value as app)
     dialogVisible.value = false
 }
-const deleteApp = (id:string)=>{
-    totalApps.value=totalApps.value.filter(v=>v.name!==id)
-    filterApps.value=totalApps.value
+const deleteApp = (id: string) => {
+    totalApps.value = totalApps.value.filter(v => v.name !== id)
+    filterApps.value = totalApps.value
 }
-const editApp = ()=>{
+const editApp = () => {
     useLayoutStore().changeMenu()
     $router.push('edit')
 }
 onMounted(() => {
     totalApps.value = [
         {
-            name:'test1',
-            description:'test1',
-            updated_time:'2023-07-08'
+            name: 'test1',
+            description: 'test1',
+            updated_time: '2023-07-08'
         },
         {
-            name:'test2',
-            description:'test1',
-            updated_time:'2023-07-08'
+            name: 'test2',
+            description: 'test1',
+            updated_time: '2023-07-08'
         },
         {
-            name:'test3',
-            description:'test1',
-            updated_time:'2023-07-08'
+            name: 'test3',
+            description: 'test1',
+            updated_time: '2023-07-08'
         }
     ]
-    filterApps.value=totalApps.value
-    // getHasApps();
+    filterApps.value = totalApps.value
 });
 
 
