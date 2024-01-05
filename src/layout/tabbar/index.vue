@@ -29,7 +29,7 @@
 
             <el-divider direction="vertical" />
 
-            <el-button icon="Refresh" circle @click="setWin('refresh')"></el-button>
+            <el-button icon="Refresh" circle  @click="setWin('refresh')"></el-button>
             <el-button icon="Minus" circle @click="setWin('min')"></el-button>
             <el-button icon="FullScreen" circle @click="setWin('max')"></el-button>
             <el-button icon="Close" circle @click="setWin('close')"></el-button>
@@ -44,7 +44,7 @@ import { ref } from 'vue';
 import userStore from '../../store/modules/user'
 import { useRouter } from 'vue-router';
 
-const { ipcRenderer } = require("electron");
+// const { ipcRenderer } = require("electron");
 
 const store = userStore()
 let $router = useRouter()
@@ -63,6 +63,9 @@ const changeDark = () => {
     const html = document.documentElement
     dark.value ? html.className = 'dark' : html.className = ''
 }
+
+
+
 </script>
 
 <style lang="scss" scoped>
@@ -102,5 +105,11 @@ html.dark .tabbar {
     .noDrag {
         -webkit-app-region: no-drag;
     }
+}
+
+.el-button:focus{
+    background-color: #fff;
+    color: #606266;
+    border-color: #dcdfe6;
 }
 </style>

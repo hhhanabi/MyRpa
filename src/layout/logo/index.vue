@@ -1,7 +1,6 @@
 <template>
     <div class="logo">
         <img src="../../../public/110168986_p0.png">
-        <span>MyRPA</span>
     </div>
 </template>
 
@@ -21,8 +20,7 @@
     font-size: 30px;
     background-color: white;
     img{
-        width: 50px;
-        height: 50px;
+        width: 100px;
     }
     span{
         margin-right: 20px;

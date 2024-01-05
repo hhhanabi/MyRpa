@@ -65,7 +65,7 @@ let userStore=useUserStore()
 }
 html.dark{
     .container{
-        background-color: black;
+        background-color: rgb(67, 64, 64);
         .slider{
             background-color: black;
         }

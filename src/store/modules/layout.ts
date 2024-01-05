@@ -3,7 +3,7 @@ import { defineStore } from "pinia";
 const useLayoutStore = defineStore('Layout', {
     state:()=>{
         return {
-            isMenu:true
+            isMenu:false
         }
     },
     actions:{

@@ -36,7 +36,7 @@
             </el-form>
             <template #footer>
                 <span class="dialog-footer">
-                    <el-button @click="dialogVisible = false">取消</el-button>
+                    <el-button @click="dialogVisible = false;hello()">取消</el-button>
                     <el-button type="primary" @click="addApp">
                         确定
                     </el-button>
@@ -52,7 +52,8 @@ import { onMounted, ref } from 'vue';
 import useLayoutStore from '@/store/modules/layout';
 import { useRouter } from 'vue-router'
 import { ElNotification } from 'element-plus';
-const fs = require('fs')
+const fs =require('fs');
+import hello from '@/utils/app';
 const $router = useRouter()
 
 let dialogVisible = ref<boolean>(false)
@@ -77,10 +78,11 @@ const appInfo = ref<app>({
     updated_time: ''
 })
 const addApp = () => {
+    const baseDir="d://test//"
     try {
-        fs.mkdirSync(`${appInfo.value.name}`)
-        fs.writeFileSync(`./${appInfo.value.name}/${appInfo.value.name}.py`, '')
-        fs.writeFileSync(`./${appInfo.value.name}/description.txt`, `${appInfo.value.description}`)
+        fs.mkdirSync(`${baseDir}/${appInfo.value.name}`)
+        fs.writeFileSync(`${baseDir}/${appInfo.value.name}/${appInfo.value.name}.py`, '')
+        fs.writeFileSync(`${baseDir}/${appInfo.value.name}/description.txt`, `${appInfo.value.description}`)
     } catch (error) {
         ElNotification({
             type: 'error',
