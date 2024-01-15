@@ -3,6 +3,10 @@
         <div class="tabbar_left">
             <Logo></Logo>
         </div>
+        <div class="tabbar_middle">
+            <el-button icon="ArrowLeft" circle class="noDrag" v-show="!layoutStore.isMenu" @click="leave()"></el-button>
+            <el-button icon="DocumentAdd" circle class="noDrag" v-show="!layoutStore.isMenu" @click="save()"></el-button>
+        </div>
         <div class="tabbar_right noDrag">
             <el-popover placement="top-start" :width="200" trigger="hover">
                 <template #reference>
@@ -33,9 +37,9 @@
             <el-button icon="Minus" circle @click="setWin('min')"></el-button>
             <el-button icon="FullScreen" circle @click="setWin('max')"></el-button>
             <el-button icon="Close" circle @click="setWin('close')"></el-button>
-
         </div>
     </div>
+    <confirmLeaveDialog ref="confirmLeaveDialogRef"></confirmLeaveDialog>
 </template>
 
 <script lang="ts" setup>
@@ -43,12 +47,15 @@ import Logo from '../logo/index.vue'
 import { ref } from 'vue';
 import userStore from '../../store/modules/user'
 import { useRouter } from 'vue-router';
+import useLayoutStore from '@/store/modules/layout';
+import confirmLeaveDialog from './confirmLeaveDialog.vue';
+const { ipcRenderer } = require("electron");
 
-// const { ipcRenderer } = require("electron");
-
+const layoutStore = useLayoutStore()
 const store = userStore()
 let $router = useRouter()
 const dark = ref(false)
+const confirmLeaveDialogRef = ref<InstanceType<typeof confirmLeaveDialog>>()
 
 const setWin = (type: string) => {
     ipcRenderer.send(type)
@@ -64,8 +71,13 @@ const changeDark = () => {
     dark.value ? html.className = 'dark' : html.className = ''
 }
 
+const leave = ()=>{
+    confirmLeaveDialogRef.value!.switchVisible()
+}
 
+const save = ()=>{
 
+}
 </script>
 
 <style lang="scss" scoped>
@@ -76,7 +88,10 @@ const changeDark = () => {
     justify-content: space-between;
     align-items: center;
     background-color: white;
-
+    .tabbar_middle {
+        position: absolute;
+        left: 280px;
+    }
     .tabbar_right {
         display: flex;
         align-items: center;
