@@ -1,5 +1,5 @@
 <template>
-  <el-tree :data="data" :props="defaultProps"  @node-click="handleNodeClick" id="el-tree" />
+  <el-tree :data="data" :props="defaultProps" @node-click="handleNodeClick" id="el-tree" />
 </template>
   
 <script lang="ts" setup>
@@ -20,63 +20,132 @@ const data: Tree[] = [
     label: '条件判断',
     children: [
       {
-        label: 'Level two 1-1',
-      }
+        label: 'IF条件',
+      },
+      {
+        label: 'Else IF',
+      },
+      {
+        label: 'END IF',
+      },
+      {
+        label: 'IF 文件存在',
+      },
+      {
+        label: 'IF 文件夹存在',
+      },
     ],
   },
   {
     label: '循环',
     children: [
       {
-        label: 'Level two 2-1',
-        children: [
-          {
-            label: 'Level three 2-1-1',
-          },
-        ],
+        label: 'For次数循环',
       },
       {
-        label: 'Level two 2-2',
-        children: [
-          {
-            label: 'Level three 2-2-1',
-          },
-        ],
+        label: 'While条件循环',
+      },
+      {
+        label: 'ForEach列表循环',
+      },
+      {
+        label: '退出循环',
+      },
+      {
+        label: '循环结束',
       },
     ],
   },
   {
-    label: '等待',
+    label: '网页操作',
     children: [
       {
-        label: 'Level two 3-1',
-        children: [
-          {
-            label: 'Level three 3-1-1',
-          },
-        ],
+        label: '打开网页',
       },
       {
-        label: 'Level two 3-2',
-        children: [
-          {
-            label: 'Level three 3-2-1',
-          },
-        ],
+        label: '点击元素',
+      },
+      {
+        label: '填写输入框',
+      },
+      {
+        label: '关闭网页',
       },
     ],
   },
   {
-    label: '网页自动化'
+    label: '鼠标键盘',
+    children: [
+      {
+        label: '键盘输入',
+      },
+      {
+        label: '鼠标点击',
+      },
+      {
+        label: '移动鼠标',
+      },
+      {
+        label: '获取鼠标当前位置',
+      },
+    ]
   },
   {
-    label: 'Excel'
+    label: 'Excel',
+    children:[
+      {
+        label:'打开/新建Excel'
+      },
+      {
+        label:'保存/另存Excel'
+      },
+      {
+        label:'关闭Excel'
+      },
+      {
+        label:'读取Excel'
+      },
+      {
+        label:'写入内容至Excel工作表'
+      }
+    ]
   },
   {
-    label: '数据处理'
+    label: '数据处理',
+    children:[
+      {
+        label:'设置变量'
+      },
+      {
+        label:'产生随机数'
+      }
+    ]
   },
   {
-    label: '操作系统'
+    label: '操作系统',
+    children:[
+      {
+        label:'获取文件列表'
+      },
+      {
+        label:'拷贝文件'
+      },
+      {
+        label:'移动文件'
+      },
+      {
+        label:'文件重命名'
+      },
+      {
+        label:'删除文件'
+      },
+      {
+        label:'读取文件'
+      },
+      {
+        label:'写入文件'
+      }
+    ]
   }
 ]
 

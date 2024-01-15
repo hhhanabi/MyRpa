@@ -42,6 +42,7 @@ let userStore=useUserStore()
         width: 260px;
         height: 100%;
         background-color: white;
+        overflow: auto;
     }
     .tabbar{
         width: 100%;
