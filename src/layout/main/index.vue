@@ -12,7 +12,7 @@
 
 </script>
 
-<style lang="scss">
+<style lang="scss" scoped>
 .fade-enter-from {
     opacity:0;
 }

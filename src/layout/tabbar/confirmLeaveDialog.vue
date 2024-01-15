@@ -4,7 +4,7 @@
         <template #footer>
             <span class="dialog-footer">
                 <el-button @click="dialogVisible = false">取消</el-button>
-                <el-button type="primary" @click="dialogVisible = false;layoutStore.isMenu=true">
+                <el-button type="primary" @click="dialogVisible = false;layoutStore.isMenu=true;$router.push('/app/dev')">
                     确定
                 </el-button>
             </span>
@@ -15,6 +15,8 @@
 <script lang="ts" setup>
 import useLayoutStore from '@/store/modules/layout';
 import { ref } from 'vue'
+import { useRouter } from 'vue-router';
+const $router = useRouter()
 const dialogVisible = ref(false)
 const layoutStore = useLayoutStore()
 const switchVisible = () => {

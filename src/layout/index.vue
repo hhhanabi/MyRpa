@@ -4,10 +4,14 @@
             <Tabbar></Tabbar>
         </div>
         <div class="slider">
-            <el-menu v-if="useLayoutStore().isMenu">
-                <Menu :menuList="userStore.menuRoutes"></Menu>
-            </el-menu>
-            <ToolBar v-else></ToolBar>
+            <Transition name="fade" mode="out-in">
+                <el-menu v-if="useLayoutStore().isMenu">
+                    <Menu :menuList="userStore.menuRoutes"></Menu>
+                </el-menu>
+            <!-- </Transition>
+            <Transition name="fade"> -->
+                <ToolBar v-else="!useLayoutStore().isMenu"></ToolBar>
+            </Transition>
         </div>
         
         <div class="main">
@@ -29,6 +33,15 @@ let userStore=useUserStore()
 </script>
 
 <style lang="scss" scoped>
+.fade-enter-from {
+    opacity:0;
+}
+.fade-enter-active{
+    transition:all 1s;
+}
+.fade-enter-to{
+    opacity:1;
+}
 
 .container{
     width: 100%;
