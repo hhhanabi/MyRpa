@@ -19,7 +19,7 @@
                     </el-form-item>
                 </el-form>
             </el-popover>
-            <img src="/110168986_p0.png" alt="">
+            <el-avatar :size="32" src="https://cube.elemecdn.com/3/7c/3ea6beec64369c2642b92c6726f1epng.png"></el-avatar>
             <el-dropdown trigger="hover">
                 <el-icon class="el-icon--right">
                     <arrow-down />
@@ -100,12 +100,8 @@ const save = ()=>{
         .el-icon--right {
             margin-right: 20px;
         }
-
-        img {
-            width: 36px;
-            height: 36px;
-            margin-left: 20px;
-            border-radius: 50%;
+        .el-avatar {
+            margin-left: 10px;
         }
     }
 }
