@@ -1,6 +1,9 @@
 <template>
     <div class="flex">
-        <VueDraggable ref="el" v-model="list" :animation="150" target=".list">
+        <VueDraggable ref="el" v-model="list" :animation="150" 
+        @start="onStart"
+        @end="onEnd"
+        target=".list">
             <TransitionGroup type="transition" :name="!drag?'fade':undefined">
                 <div class="list">
                     <el-card shadow="hover" v-for="item in list" :key="item.id">
@@ -13,7 +16,7 @@
 </template>
   
 <script setup lang="ts">
-import { ref } from 'vue'
+import { nextTick,ref } from 'vue'
 import { VueDraggable } from 'vue-draggable-plus'
 const drag = ref(false)
 const list = ref([
@@ -35,6 +38,15 @@ const list = ref([
     }
 ])
 
+function onStart() {
+  drag.value = true
+}
+function onEnd() {
+  console.log('onEnd')
+  nextTick(() => {
+    drag.value = false
+  })
+}
 
 </script>
   

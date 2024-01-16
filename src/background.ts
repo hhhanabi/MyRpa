@@ -23,7 +23,7 @@ app.whenReady().then(async () => {
         }
 
     });
-    ipcMain.on('close', () => win.close());
+    ipcMain.on('close', () => {win.close();app.quit()});
     ipcMain.on('refresh', () => win.reload());
     // 根据命令行参数加载URL或本地文件
     if (process.argv[2]) {
