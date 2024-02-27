@@ -49,7 +49,7 @@ import userStore from '../../store/modules/user'
 import { useRouter } from 'vue-router';
 import useLayoutStore from '@/store/modules/layout';
 import confirmLeaveDialog from './confirmLeaveDialog.vue';
-const { ipcRenderer } = require("electron");
+// const { ipcRenderer } = require("electron");
 
 const layoutStore = useLayoutStore()
 const store = userStore()

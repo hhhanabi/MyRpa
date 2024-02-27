@@ -13,7 +13,7 @@ app.whenReady().then(async () => {
             webSecurity: false, // 禁用web安全策略
         }
     })
-    // win.webContents.openDevTools()
+    win.webContents.openDevTools()
     ipcMain.on('min', () => win.minimize());
     ipcMain.on('max', () => {
         if (win.isMaximized()) {
