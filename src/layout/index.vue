@@ -8,9 +8,11 @@
                 <el-menu v-if="useLayoutStore().isMenu">
                     <Menu :menuList="userStore.menuRoutes"></Menu>
                 </el-menu>
-            <!-- </Transition>
-            <Transition name="fade"> -->
-                <ToolBar v-else="!useLayoutStore().isMenu"></ToolBar>
+            </Transition>
+            <Transition name="fade" mode="out-in">
+                <el-menu v-if="!useLayoutStore().isMenu">
+                    <ToolBar :menuList="userStore.menuRoutes"></ToolBar>
+                </el-menu>                
             </Transition>
         </div>
         

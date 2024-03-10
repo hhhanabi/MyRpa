@@ -36,7 +36,7 @@
             </el-form>
             <template #footer>
                 <span class="dialog-footer">
-                    <el-button @click="dialogVisible = false;hello()">取消</el-button>
+                    <el-button @click="dialogVisible = false;">取消</el-button>
                     <el-button type="primary" @click="addApp">
                         确定
                     </el-button>
@@ -53,7 +53,6 @@ import useLayoutStore from '@/store/modules/layout';
 import { useRouter } from 'vue-router'
 import { ElNotification } from 'element-plus';
 const fs =require('fs');
-import hello from '@/utils/app';
 const $router = useRouter()
 
 let dialogVisible = ref<boolean>(false)

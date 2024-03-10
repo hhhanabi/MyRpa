@@ -1,15 +1,16 @@
 <template>
   <div>
     <el-tree :data="data" :props="defaultProps" @node-click="handleNodeClick" id="el-tree" />
-    <my_if></my_if>
+    <open-web></open-web>
   </div>
 </template>
   
 <script lang="ts" setup>
 import Node from 'element-plus/es/components/cascader-panel/src/node.mjs';
-import my_if from '@/functions/condition/if.vue'
-
 import functionStore from '@/store/modules/function';
+import OpenWeb from '@/functions/openWeb.vue';
+
+
 interface Tree {
   label: string
   name: string
@@ -18,7 +19,8 @@ interface Tree {
 
 const handleNodeClick = (data: Tree, node: Node) => {
   if (!node.isLeaf) return
-  functionStore().visible[data.name]=true
+  functionStore().enableVisibility(data.name)
+
 }
 
 const data: Tree[] = [
@@ -80,7 +82,7 @@ const data: Tree[] = [
     children: [
       {
         label: '打开网页',
-        name:'my_if'
+        name:'openWeb'
       },
       {
         label: '点击元素',
