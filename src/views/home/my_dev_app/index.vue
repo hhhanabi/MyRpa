@@ -19,8 +19,8 @@
                 <el-table-column label="操作" width="300px">
                     <template #="{ row }">
                         <el-button icon="VideoPlay" circle @click="playApp(row.path)" />
-                        <el-button icon="Edit" circle @click="editApp" />
-                        <el-button icon="Delete" circle @click="deleteApp(row.name)" />
+                        <el-button icon="Edit" circle @click="editApp(row)" />
+                        <el-button icon="Delete" circle @click="deleteApp(row)" />
                     </template>
                 </el-table-column>
             </el-table>
@@ -52,6 +52,7 @@ import { onMounted, ref } from 'vue';
 import useLayoutStore from '@/store/modules/layout';
 import { useRouter } from 'vue-router'
 import { ElNotification } from 'element-plus';
+import functionStore from '@/store/modules/function'
 const fs = require('fs');
 const path = require('path')
 const { exec } = require('child_process');
@@ -99,12 +100,21 @@ const addApp = () => {
     totalApps.value.push(appInfo.value as app)
     dialogVisible.value = false
 }
-const deleteApp = (id: string) => {
-    totalApps.value = totalApps.value.filter(v => v.name !== id)
+const deleteApp = (row: any) => {
+    const folderPath = path.dirname(row.path)
+    try {
+        // 删除文件夹及其内容
+        fs.rmdirSync(folderPath, { recursive: true });
+        console.log(`文件夹 ${folderPath} 已成功删除`);
+    } catch (error:any) {
+        console.error(`删除文件夹时出错: ${error.message}`);
+    }
+    totalApps.value = totalApps.value.filter(v => v.name !== row.name)
     filterApps.value = totalApps.value
 }
-const editApp = () => {
+const editApp = (row: any) => {
     useLayoutStore().changeMenu()
+    functionStore().setCurrentFilePath(row.path)
     $router.push('edit')
 }
 const playApp = (pythonFilePath: string) => {

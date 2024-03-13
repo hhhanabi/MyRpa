@@ -1,6 +1,6 @@
 // In your Pinia store file (functionStore.ts)
 import { defineStore } from "pinia";
-
+const fs = require('fs')
 
 const functionStore = defineStore('function', {
     state: (): { visible:any, currentCodes:string[][],currentFilePath:string} => {
@@ -42,8 +42,11 @@ const functionStore = defineStore('function', {
             }
             this.currentCodes.push(codeItem)
         },
+        setCurrentFilePath(path:string) {
+            this.currentFilePath=path
+        },
         writeToCurrentFile() {
-            
+            fs.writeFileSync(this.currentFilePath, this.currentCodes.join('\n'), 'utf-8');
         }
     },
 });

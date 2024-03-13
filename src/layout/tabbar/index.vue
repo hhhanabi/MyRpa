@@ -49,6 +49,7 @@ import userStore from '../../store/modules/user'
 import { useRouter } from 'vue-router';
 import useLayoutStore from '@/store/modules/layout';
 import confirmLeaveDialog from './confirmLeaveDialog.vue';
+import functionStore from '@/store/modules/function';
 // const { ipcRenderer } = require("electron");
 
 const layoutStore = useLayoutStore()
@@ -76,7 +77,8 @@ const leave = ()=>{
 }
 
 const save = ()=>{
-
+    functionStore().writeToCurrentFile();
+    layoutStore.isMenu=false;
 }
 </script>
 
