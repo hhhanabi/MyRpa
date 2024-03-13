@@ -3,7 +3,7 @@ import { defineStore } from "pinia";
 
 
 const functionStore = defineStore('function', {
-    state: (): { visible:any, currentCodes:string[]} => {
+    state: (): { visible:any, currentCodes:string[][],currentFilePath:string} => {
         return {
             visible: {
                 openWeb: false,
@@ -11,11 +11,12 @@ const functionStore = defineStore('function', {
                 // Initialize other properties as needed
             },
             currentCodes:[
-                "from selenium import webdriver",
+                ["from selenium import webdriver",
                 "from selenium.webdriver.chrome.options import Options",
                 "chrome_options = Options()",
-                'chrome_options.add_experimental_option("detach", True)'
-            ]
+                'chrome_options.add_experimental_option("detach", True)']
+            ],
+            currentFilePath:''
         };
     },
     actions: {
@@ -34,12 +35,16 @@ const functionStore = defineStore('function', {
         getVisibility(property: string) {
             return this.visible[property];
         },
-        addToCurrentCodes(codes:string[]){
+        addToCurrentCodes(codes:string[]) {
+            const codeItem = []
             for(const code in codes){
-                this.currentCodes.push(code);
+                codeItem.push(code)
             }
+            this.currentCodes.push(codeItem)
+        },
+        writeToCurrentFile() {
+            
         }
-
     },
 });
 

@@ -14,11 +14,11 @@
                 <el-table-column prop="name" label="应用名称" width="300px">
                 </el-table-column>
                 <el-table-column label="应用描述" prop="description"></el-table-column>
-                <el-table-column label="更新时间" prop="updated_time">
+                <el-table-column label="创建时间" prop="updated_time">
                 </el-table-column>
                 <el-table-column label="操作" width="300px">
                     <template #="{ row }">
-                        <el-button icon="VideoPlay" circle />
+                        <el-button icon="VideoPlay" circle @click="playApp(row.path)" />
                         <el-button icon="Edit" circle @click="editApp" />
                         <el-button icon="Delete" circle @click="deleteApp(row.name)" />
                     </template>
@@ -52,7 +52,9 @@ import { onMounted, ref } from 'vue';
 import useLayoutStore from '@/store/modules/layout';
 import { useRouter } from 'vue-router'
 import { ElNotification } from 'element-plus';
-const fs =require('fs');
+const fs = require('fs');
+const path = require('path')
+const { exec } = require('child_process');
 const $router = useRouter()
 
 let dialogVisible = ref<boolean>(false)
@@ -74,10 +76,11 @@ const getFilterApps = () => {
 const appInfo = ref<app>({
     name: '',
     description: '',
-    updated_time: ''
+    updated_time: '',
+    path: ''
 })
+const baseDir = "r://test//"
 const addApp = () => {
-    const baseDir="d://test//"
     try {
         fs.mkdirSync(`${baseDir}/${appInfo.value.name}`)
         fs.writeFileSync(`${baseDir}/${appInfo.value.name}/${appInfo.value.name}.py`, '')
@@ -91,7 +94,7 @@ const addApp = () => {
     }
     ElNotification({
         type: 'success',
-        message:'创建成功'
+        message: '创建成功'
     })
     totalApps.value.push(appInfo.value as app)
     dialogVisible.value = false
@@ -104,25 +107,57 @@ const editApp = () => {
     useLayoutStore().changeMenu()
     $router.push('edit')
 }
-onMounted(() => {
-    totalApps.value = [
-        {
-            name: 'test1',
-            description: 'test1',
-            updated_time: '2023-07-08'
-        },
-        {
-            name: 'test2',
-            description: 'test1',
-            updated_time: '2023-07-08'
-        },
-        {
-            name: 'test3',
-            description: 'test1',
-            updated_time: '2023-07-08'
+const playApp = (pythonFilePath: string) => {
+    // 构建要执行的命令
+    const command = `python ${pythonFilePath}.py`;
+
+    // 执行命令
+    exec(command, (error: any, stdout: any) => {
+        if (error) {
+            console.error(`执行命令时出错: ${error}`);
+            return;
         }
-    ]
-    filterApps.value = totalApps.value
+
+        console.log(`Python脚本执行结果:\n${stdout}`);
+    })
+}
+onMounted(() => {
+    try {
+        const folders = fs.readdirSync(baseDir, { withFileTypes: true })
+            .filter((dirent: { isDirectory: () => any; }) => dirent.isDirectory())
+            .map((dirent: { name: any; }) => dirent.name);
+
+        totalApps.value = folders.map((folder: any) => {
+            const folderPath = path.join(baseDir, folder);
+            const descriptionPath = path.join(folderPath, 'description.txt');
+
+            let description = '';
+            let updatedTime = '';
+
+            try {
+                // 读取description.txt文件内容
+                description = fs.readFileSync(descriptionPath, 'utf-8');
+
+                // 获取文件的创建时间
+                const stats = fs.statSync(folderPath);
+                updatedTime = stats.birthtime.toISOString();  // 使用ISO格式的时间
+
+            } catch (error) {
+                console.error(`Error reading description.txt in ${folder}:`, error);
+            }
+
+            return {
+                name: folder,
+                description: description,
+                updated_time: updatedTime.slice(0, 10),
+                path: path.join(folderPath, folder)
+            };
+        });
+
+        filterApps.value = totalApps.value;
+    } catch (error) {
+        console.error('Error reading directories:', error);
+    }
 });
 
 
