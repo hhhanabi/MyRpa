@@ -1,14 +1,24 @@
 <script setup lang="ts">
 
 import functionStore from '@/store/modules/function';
-let params:string[] = []
-let result:string[] = []
+import { ref } from 'vue';
+import codeListStore from '@/store/modules/codeList';
+let params = ref<string[]>(["", ""])
+let result: string[] = []
 const store = functionStore();
-const addFunction = ()=>{
+const addFunction = () => {
   result.push("driver = webdriver.Chrome(options=chrome_options)")
-  result.push("driver.get("+params[0]+")")
-  result.push(params[1]+"=driver")
+  result.push("driver.get(" + params.value?.[0] + ")")
+  result.push(params.value?.[1] + "=driver")
   store.addToCurrentCodes(result);
+  codeListStore().addOpenWeb(params.value?.[0], params.value?.[1])
+  cancelFunction();
+}
+const cancelFunction = () => {
+  functionStore().disableVisibility('openWeb')
+  params.value.forEach((_, index) => {
+    params.value[index] = "";
+  });
 }
 </script>
 
@@ -23,16 +33,14 @@ const addFunction = ()=>{
       </el-form-item>
     </el-form>
     <template #footer>
-                <span class="dialog-footer">
-                    <el-button @click="functionStore().disableVisibility('openWeb')">取消</el-button>
-                    <el-button type="primary" @click="addFunction()">
-                        确定
-                    </el-button>
-                </span>
+      <span class="dialog-footer">
+        <el-button @click="cancelFunction()">取消</el-button>
+        <el-button type="primary" @click="addFunction()">
+          确定
+        </el-button>
+      </span>
     </template>
   </el-dialog>
 </template>
 
-<style scoped lang="scss">
-
-</style>
+<style scoped lang="scss"></style>

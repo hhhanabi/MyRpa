@@ -1,12 +1,12 @@
 <template>
     <div class="flex">
-        <VueDraggable ref="el" v-model="list" :animation="150" 
+        <VueDraggable ref="el" v-model="codeListStore().codeList" :animation="150"
         @start="onStart"
         @end="onEnd"
         target=".list">
             <TransitionGroup type="transition" :name="!drag?'fade':undefined">
                 <div class="list">
-                    <el-card shadow="hover" v-for="item in list" :key="item.id">
+                    <el-card shadow="hover" v-for="item in codeListStore().codeList" :key="item.id">
                         {{ item.name }}
                     </el-card>
                 </div>
@@ -18,25 +18,10 @@
 <script setup lang="ts">
 import { nextTick,ref } from 'vue'
 import { VueDraggable } from 'vue-draggable-plus'
+import codeListStore from "@/store/modules/codeList.ts";
 const drag = ref(false)
-const list = ref([
-    {
-        name: 'Joao',
-        id: 1
-    },
-    {
-        name: 'Jean',
-        id: 2
-    },
-    {
-        name: 'Johanna',
-        id: 3
-    },
-    {
-        name: 'Juan',
-        id: 4
-    }
-])
+
+
 
 function onStart() {
   drag.value = true
