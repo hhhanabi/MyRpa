@@ -2,6 +2,7 @@
   <div>
     <el-tree :data="data" :props="defaultProps" @node-click="handleNodeClick" id="el-tree" />
     <open-web></open-web>
+    <close-web></close-web>
   </div>
 </template>
   
@@ -9,6 +10,7 @@
 import Node from 'element-plus/es/components/cascader-panel/src/node.mjs';
 import functionStore from '@/store/modules/function';
 import OpenWeb from '@/functions/openWeb.vue';
+import CloseWeb from '@/functions/closeWeb.vue';
 
 
 interface Tree {
@@ -94,7 +96,7 @@ const data: Tree[] = [
       },
       {
         label: '关闭网页',
-        name:'my_if'
+        name:'closeWeb'
       },
     ],
   },

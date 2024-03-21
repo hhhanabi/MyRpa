@@ -1,40 +1,44 @@
 <template>
-    <div class="flex">
+  <div class="flex">
         <VueDraggable ref="el" v-model="codeListStore().codeList" :animation="150"
         @start="onStart"
         @end="onEnd"
         target=".list">
             <TransitionGroup type="transition" :name="!drag?'fade':undefined">
-                <div class="list">
+                <div class="list" >
                     <el-card shadow="hover" v-for="item in codeListStore().codeList" :key="item.id">
-                        {{ item.name }}
+                        <span>{{ item.name }}</span>
+                        <el-button icon="Delete" circle @click="deleteCodeById(item.id)"/>
                     </el-card>
                 </div>
             </TransitionGroup>
         </VueDraggable>
     </div>
 </template>
-  
+
 <script setup lang="ts">
-import { nextTick,ref } from 'vue'
-import { VueDraggable } from 'vue-draggable-plus'
+import { nextTick, ref } from "vue";
+import { VueDraggable } from "vue-draggable-plus";
 import codeListStore from "@/store/modules/codeList.ts";
-const drag = ref(false)
-
-
+import functionStore from "@/store/modules/function";
+const drag = ref(false);
 
 function onStart() {
-  drag.value = true
+  drag.value = true;
 }
 function onEnd() {
-  console.log('onEnd')
+  console.log("onEnd");
   nextTick(() => {
-    drag.value = false
-  })
+    drag.value = false;
+  });
 }
 
+function deleteCodeById(id:number) {
+  codeListStore().deleteCode(id)
+  functionStore().deleteCode(id)
+}
 </script>
-  
+
 <style scoped>
 .fade-move,
 .fade-enter-active,
@@ -51,5 +55,7 @@ function onEnd() {
 .fade-leave-active {
   position: absolute;
 }
+
+
+
 </style>
-  

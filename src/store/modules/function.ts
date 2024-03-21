@@ -8,6 +8,7 @@ const functionStore = defineStore('function', {
             visible: {
                 openWeb: false,
                 another_property: false,
+                closeWeb:false
                 // Initialize other properties as needed
             },
             currentCodes:[
@@ -37,8 +38,9 @@ const functionStore = defineStore('function', {
         },
         addToCurrentCodes(codes:string[]) {
             const codeItem = []
-            for(const code in codes){
+            for(const code of codes){
                 codeItem.push(code)
+                console.log(code)
             }
             this.currentCodes.push(codeItem)
         },
@@ -46,7 +48,11 @@ const functionStore = defineStore('function', {
             this.currentFilePath=path
         },
         writeToCurrentFile() {
-            fs.writeFileSync(this.currentFilePath, this.currentCodes.join('\n'), 'utf-8');
+            const formattedContent = this.currentCodes.map(codeArray => codeArray.join('\n')).join('\n\n');
+            fs.writeFileSync(this.currentFilePath + '.py', formattedContent, 'utf-8');        
+        },
+        deleteCode(id:number) {
+            this.currentCodes.splice(id,1);
         }
     },
 });
