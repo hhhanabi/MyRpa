@@ -36,16 +36,6 @@ export const constantRoute = [
         }
     },
     {
-        path:'/screen',
-        name:'screen',
-        component:()=>import('../views/screen/index.vue'),
-        meta:{
-            title:'大数据',
-            hidden:false,
-            icon:'Platform'
-        }
-    },
-    {
         path:'/home',
         name:'home',
         component:()=>import('../layout/index.vue'),

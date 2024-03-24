@@ -5,7 +5,8 @@
         </div>
         <div class="tabbar_middle">
             <el-button icon="ArrowLeft" circle class="noDrag" v-show="!layoutStore.isMenu" @click="leave()"></el-button>
-            <el-button icon="DocumentAdd" circle class="noDrag" v-show="!layoutStore.isMenu" @click="save()"></el-button>
+            <el-button icon="DocumentAdd"  class="noDrag" v-show="!layoutStore.isMenu" @click="save()"></el-button>
+            <el-button class="noDrag" v-show="!layoutStore.isMenu" @click="capture()">捕获元素</el-button>
         </div>
         <div class="tabbar_right noDrag">
             <el-popover placement="top-start" :width="200" trigger="hover">
@@ -40,6 +41,7 @@
         </div>
     </div>
     <confirmLeaveDialog ref="confirmLeaveDialogRef"></confirmLeaveDialog>
+    <captureDialog ref="captureDialogRef"></captureDialog>
 </template>
 
 <script lang="ts" setup>
@@ -50,6 +52,7 @@ import { useRouter } from 'vue-router';
 import useLayoutStore from '@/store/modules/layout';
 import confirmLeaveDialog from './confirmLeaveDialog.vue';
 import functionStore from '@/store/modules/function';
+import captureDialog from './captureDialog.vue';
 const { ipcRenderer } = require("electron");
 
 const layoutStore = useLayoutStore()
@@ -57,6 +60,7 @@ const store = userStore()
 let $router = useRouter()
 const dark = ref(false)
 const confirmLeaveDialogRef = ref<InstanceType<typeof confirmLeaveDialog>>()
+const captureDialogRef = ref<InstanceType<typeof captureDialog>>()
 
 const setWin = (type: string) => {
     ipcRenderer.send(type)
@@ -80,6 +84,10 @@ const save = ()=>{
     functionStore().writeToCurrentFile();
     layoutStore.isMenu=true;
     $router.push('/app/dev')
+}
+
+const capture = ()=>{
+    captureDialogRef.value!.switchVisible()
 }
 </script>
 

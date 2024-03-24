@@ -1,4 +1,4 @@
-import { app, BrowserWindow,ipcMain } from 'electron'
+import { app, BrowserWindow,ipcMain,session} from 'electron'
 
 // 等待Electron应用就绪后创建BrowserWindow窗口
 app.whenReady().then(async () => {
@@ -14,6 +14,7 @@ app.whenReady().then(async () => {
         }
     })
     win.webContents.openDevTools()
+    session.defaultSession.loadExtension('C:\\Documents and Settings\\asuka\\Local Settings\\Application Data\\Google\\Chrome\\User Data\\Default\\Extensions\\nhdogjmejiglipccpnnnanhbledajbpd\\6.6.1_0')
     ipcMain.on('min', () => win.minimize());
     ipcMain.on('max', () => {
         if (win.isMaximized()) {

@@ -15,6 +15,7 @@ const addFunction = () => {
 }
 const cancelFunction = () => {
   functionStore().disableVisibility(name)
+  result = []
   params.value.forEach((_, index) => {
     params.value[index] = "";
   });

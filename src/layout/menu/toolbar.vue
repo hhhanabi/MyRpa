@@ -3,6 +3,10 @@
     <el-tree :data="data" :props="defaultProps" @node-click="handleNodeClick" id="el-tree" />
     <open-web></open-web>
     <close-web></close-web>
+    <set-variable></set-variable>
+    <click></click>
+    <clear></clear>
+    <save-element></save-element>
   </div>
 </template>
   
@@ -11,6 +15,10 @@ import Node from 'element-plus/es/components/cascader-panel/src/node.mjs';
 import functionStore from '@/store/modules/function';
 import OpenWeb from '@/functions/openWeb.vue';
 import CloseWeb from '@/functions/closeWeb.vue';
+import setVariable from '@/functions/setVariable.vue';
+import click from '@/functions/click.vue';
+import Clear from '@/functions/clear.vue';
+import SaveElement from '@/functions/saveElement.vue';
 
 
 interface Tree {
@@ -26,58 +34,58 @@ const handleNodeClick = (data: Tree, node: Node) => {
 }
 
 const data: Tree[] = [
-  {
-    label: '条件判断',
-    name:'my_if',
-    children: [
-      {
-        label: 'IF条件',
-        name:'my_if'
-      },
-      {
-        label: 'Else IF',
-        name:'my_if'
-      },
-      {
-        label: 'END IF',
-        name:'my_if'
-      },
-      {
-        label: 'IF 文件存在',
-        name:'my_if'
-      },
-      {
-        label: 'IF 文件夹存在',
-        name:'my_if'
-      },
-    ],
-  },
-  {
-    label: '循环',
-    name:'my_if',
-    children: [
-      {
-        label: 'For次数循环',
-        name:'my_if'
-      },
-      {
-        label: 'While条件循环',
-        name:'my_if'
-      },
-      {
-        label: 'ForEach列表循环',
-        name:'my_if'
-      },
-      {
-        label: '退出循环',
-        name:'my_if'
-      },
-      {
-        label: '循环结束',
-        name:'my_if'
-      },
-    ],
-  },
+  // {
+  //   label: '条件判断',
+  //   name:'my_if',
+  //   children: [
+  //     {
+  //       label: 'IF条件',
+  //       name:'my_if'
+  //     },
+  //     {
+  //       label: 'Else IF',
+  //       name:'my_if'
+  //     },
+  //     {
+  //       label: 'END IF',
+  //       name:'my_if'
+  //     },
+  //     {
+  //       label: 'IF 文件存在',
+  //       name:'my_if'
+  //     },
+  //     {
+  //       label: 'IF 文件夹存在',
+  //       name:'my_if'
+  //     },
+  //   ],
+  // },
+  // {
+  //   label: '循环',
+  //   name:'my_if',
+  //   children: [
+  //     {
+  //       label: 'For次数循环',
+  //       name:'my_if'
+  //     },
+  //     {
+  //       label: 'While条件循环',
+  //       name:'my_if'
+  //     },
+  //     {
+  //       label: 'ForEach列表循环',
+  //       name:'my_if'
+  //     },
+  //     {
+  //       label: '退出循环',
+  //       name:'my_if'
+  //     },
+  //     {
+  //       label: '循环结束',
+  //       name:'my_if'
+  //     },
+  //   ],
+  // },
   {
     label: '网页操作',
     name:'my_if',
@@ -87,8 +95,12 @@ const data: Tree[] = [
         name:'openWeb'
       },
       {
+        label: '保存元素',
+        name:'saveElement'
+      },
+      {
         label: '点击元素',
-        name:'my_if'
+        name:'click'
       },
       {
         label: '填写输入框',
@@ -98,6 +110,10 @@ const data: Tree[] = [
         label: '关闭网页',
         name:'closeWeb'
       },
+      {
+        label: '清空元素',
+        name:'clear'
+      }
     ],
   },
   // {
@@ -143,17 +159,20 @@ const data: Tree[] = [
   //     }
   //   ]
   // },
-  // {
-  //   label: '数据处理',
-  //   children:[
-  //     {
-  //       label:'设置变量'
-  //     },
-  //     {
-  //       label:'产生随机数'
-  //     }
-  //   ]
-  // },
+  {
+    label: '数据处理',
+    name:'dataProcess',
+    children:[
+      {
+        label:'设置变量',
+        name:'setVariable'
+      },
+      {
+        label:'产生随机数',
+        name:'createRandomNumber'
+      }
+    ]
+  },
   // {
   //   label: '操作系统',
   //   children:[

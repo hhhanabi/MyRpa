@@ -1,23 +1,40 @@
 // In your Pinia store file (functionStore.ts)
 import { defineStore } from "pinia";
-const fs = require('fs')
-
-const functionStore = defineStore('function', {
-    state: (): { visible:any, currentCodes:string[][],currentFilePath:string} => {
+import codeListStore from "./codeList";
+const fs = require("fs");
+type CodeItem = { id: number; codes: string[] };
+const functionStore = defineStore("function", {
+    state: (): {
+        visible: any;
+        currentCodes: CodeItem[];
+        currentFilePath: string;
+        currentId: number;
+    } => {
         return {
+            currentId: 1,
             visible: {
                 openWeb: false,
                 another_property: false,
-                closeWeb:false
+                closeWeb: false,
+                click:false,
+                clear:false,
+                saveElement:false
                 // Initialize other properties as needed
             },
-            currentCodes:[
-                ["from selenium import webdriver",
-                "from selenium.webdriver.chrome.options import Options",
-                "chrome_options = Options()",
-                'chrome_options.add_experimental_option("detach", True)']
+            currentCodes: [
+                {
+                    id: 0,
+                    codes: [
+                        "from selenium import webdriver",
+                        "from selenium.webdriver.chrome.options import Options",
+                        "from selenium.webdriver.common.by import By",
+                        "chrome_options = Options()",
+                        'chrome_options.add_experimental_option("detach", True)',
+                        `chrome_options.add_experimental_option("debuggerAddress", "127.0.0.1:9222")`
+                    ],
+                },
             ],
-            currentFilePath:''
+            currentFilePath: "",
         };
     },
     actions: {
@@ -36,25 +53,47 @@ const functionStore = defineStore('function', {
         getVisibility(property: string) {
             return this.visible[property];
         },
-        addToCurrentCodes(codes:string[]) {
-            const codeItem = []
-            for(const code of codes){
-                codeItem.push(code)
-                console.log(code)
+        addToCurrentCodes(codess: string[]) {
+            const codeItem: CodeItem = { id: 0, codes: [] };
+            for (const code of codess) {
+                codeItem.codes.push(code);
             }
-            this.currentCodes.push(codeItem)
+            codeItem.id = this.currentId++;
+            this.currentCodes.push(codeItem);
         },
-        setCurrentFilePath(path:string) {
-            this.currentFilePath=path
+        setCurrentFilePath(path: string) {
+            this.currentFilePath = path;
         },
         writeToCurrentFile() {
-            const formattedContent = this.currentCodes.map(codeArray => codeArray.join('\n')).join('\n\n');
-            fs.writeFileSync(this.currentFilePath + '.py', formattedContent, 'utf-8');        
+            const currentIds = codeListStore().getCurrentIds();
+            this.adjustCurrentCodes(currentIds)
+            const formattedContent = this.currentCodes
+                .map((codeArray) => codeArray.codes.join("\n")).join("\n")
+            fs.writeFileSync(this.currentFilePath + ".py", formattedContent, "utf-8");
         },
-        deleteCode(id:number) {
-            this.currentCodes.splice(id,1);
-        }
+        adjustCurrentCodes(currentIds: number[]) {
+            // 根据 currentIds 重新调整 currentCodes 的顺序
+            let adjustedCodes: CodeItem[] = [];
+            adjustedCodes.push(this.currentCodes[0])
+            currentIds.forEach((id) => {
+                let code = this.currentCodes.find((item) => item.id === id);
+                console.log(code);
+                if (code) {
+
+                    adjustedCodes.push(code);
+                }
+            });
+            this.currentCodes = adjustedCodes;
+        },
+        deleteCode(id: number) {
+            for (let i = 0; i < this.currentCodes.length; i++) {
+                if (this.currentCodes[i].id === id) {
+                    this.currentCodes.splice(i, 1);
+                    break;
+                }
+            }
+        },
     },
 });
 
-export default functionStore
+export default functionStore;

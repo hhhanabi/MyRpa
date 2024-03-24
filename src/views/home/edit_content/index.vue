@@ -8,7 +8,7 @@
                 <div class="list" >
                     <el-card shadow="hover" v-for="item in codeListStore().codeList" :key="item.id">
                         <span>{{ item.name }}</span>
-                        <el-button icon="Delete" circle @click="deleteCodeById(item.id)"/>
+                        <el-button icon="Delete" type="danger" circle @click="deleteCodeById(item.id)"/>
                     </el-card>
                 </div>
             </TransitionGroup>
@@ -56,6 +56,10 @@ function deleteCodeById(id:number) {
   position: absolute;
 }
 
+.el-button {
+  position: absolute;
+  right: 10px;
+}
 
 
 </style>
