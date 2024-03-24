@@ -173,32 +173,24 @@ const data: Tree[] = [
       }
     ]
   },
-  // {
-  //   label: '操作系统',
-  //   children:[
-  //     {
-  //       label:'获取文件列表'
-  //     },
-  //     {
-  //       label:'拷贝文件'
-  //     },
-  //     {
-  //       label:'移动文件'
-  //     },
-  //     {
-  //       label:'文件重命名'
-  //     },
-  //     {
-  //       label:'删除文件'
-  //     },
-  //     {
-  //       label:'读取文件'
-  //     },
-  //     {
-  //       label:'写入文件'
-  //     }
-  //   ]
-  // }
+  {
+    label: '文件',
+    name:'file',
+    children:[
+      {
+        label:'删除文件',
+        name:'deleteFile'
+      },
+      {
+        label:'读取文件',
+        name:'readFile'
+      },
+      {
+        label:'写入文件',
+        name:'writeFile'
+      }
+    ]
+  }
 ]
 
 const defaultProps = {

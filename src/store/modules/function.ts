@@ -18,7 +18,10 @@ const functionStore = defineStore("function", {
                 closeWeb: false,
                 click:false,
                 clear:false,
-                saveElement:false
+                saveElement:false,
+                readFile:false,
+                deleteFile:false,
+                writeFile:false,
                 // Initialize other properties as needed
             },
             currentCodes: [

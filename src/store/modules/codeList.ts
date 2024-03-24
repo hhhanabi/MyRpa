@@ -58,6 +58,27 @@ const codeListStore = defineStore("codeList", {
       }
       this.codeList.push(item)
     },
+    addReadFile(path:string,element:string) {
+      const item = {
+        name:`读取对应路径文件${path}至${element}`,
+        id:this.currentId++
+      }
+      this.codeList.push(item)
+    },
+    addWriteFile(path:string,_content:string) {
+      const item = {
+        name:`写入对应路径文件${path}`,
+        id:this.currentId++
+      }
+      this.codeList.push(item)
+    },
+    addDeleteFile(path:string) {
+      const item = {
+        name:`删除对应路径文件${path}`,
+        id:this.currentId++
+      }
+      this.codeList.push(item)
+    },
     getCurrentIds() {
       const array = [];
       for (const code of this.codeList) {
