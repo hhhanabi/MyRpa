@@ -22,6 +22,12 @@ const functionStore = defineStore("function", {
                 readFile:false,
                 deleteFile:false,
                 writeFile:false,
+                input:false,
+                createRandomNumber:false,
+                getCurrentMousePosition:false,
+                keyboardInput:false,
+                mouseClick:false,
+                moveMouse:false
                 // Initialize other properties as needed
             },
             currentCodes: [
@@ -32,7 +38,6 @@ const functionStore = defineStore("function", {
                         "from selenium.webdriver.chrome.options import Options",
                         "from selenium.webdriver.common.by import By",
                         "chrome_options = Options()",
-                        'chrome_options.add_experimental_option("detach", True)',
                         `chrome_options.add_experimental_option("debuggerAddress", "127.0.0.1:9222")`
                     ],
                 },

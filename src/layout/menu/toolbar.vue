@@ -1,12 +1,21 @@
 <template>
   <div>
-    <el-tree :data="data" :props="defaultProps" @node-click="handleNodeClick" id="el-tree" />
+    <el-tree :data="data" :props="defaultProps" @node-click="handleNodeClick" id="el-tree" node-key="label" :default-expanded-keys="data.map(tree => tree.label)"/>
     <open-web></open-web>
     <close-web></close-web>
     <set-variable></set-variable>
     <click></click>
     <clear></clear>
     <save-element></save-element>
+    <Input></Input>
+    <DeleteFile></DeleteFile>
+    <ReadFile></ReadFile>
+    <WriteFile></WriteFile>
+    <MouseClick></MouseClick>
+    <MoveMouse></MoveMouse>
+    <GetCurrentMousePosition></GetCurrentMousePosition>
+    <CreateRandomNumber></CreateRandomNumber>
+    <KeyboardInput></KeyboardInput>
   </div>
 </template>
   
@@ -19,6 +28,15 @@ import setVariable from '@/functions/setVariable.vue';
 import click from '@/functions/click.vue';
 import Clear from '@/functions/clear.vue';
 import SaveElement from '@/functions/saveElement.vue';
+import Input from '@/functions/input.vue';
+import DeleteFile from '@/functions/deleteFile.vue';
+import ReadFile from '@/functions/readFile.vue';
+import WriteFile from '@/functions/writeFile.vue';
+import MouseClick from '@/functions/mouseClick.vue';
+import MoveMouse from '@/functions/moveMouse.vue';
+import GetCurrentMousePosition from '@/functions/getCurrentMousePosition.vue';
+import CreateRandomNumber from '@/functions/createRandomNumber.vue';
+import KeyboardInput from '@/functions/keyboardInput.vue';
 
 
 interface Tree {
@@ -104,7 +122,7 @@ const data: Tree[] = [
       },
       {
         label: '填写输入框',
-        name:'my_if'
+        name:'input'
       },
       {
         label: '关闭网页',
@@ -116,23 +134,28 @@ const data: Tree[] = [
       }
     ],
   },
-  // {
-  //   label: '鼠标键盘',
-  //   children: [
-  //     {
-  //       label: '键盘输入',
-  //     },
-  //     {
-  //       label: '鼠标点击',
-  //     },
-  //     {
-  //       label: '移动鼠标',
-  //     },
-  //     {
-  //       label: '获取鼠标当前位置',
-  //     },
-  //   ]
-  // },
+  {
+    label: '鼠标键盘',
+    name:'keyboardAndMouse',
+    children: [
+      {
+        label: '键盘输入',
+        name:'keyboardInput'
+      },
+      {
+        label: '鼠标点击',
+        name:'mouseClick'
+      },
+      {
+        label: '移动鼠标',
+        name:'moveMouse'
+      },
+      {
+        label: '获取鼠标当前位置',
+        name:'getCurrentMousePosition'
+      },
+    ]
+  },
   // {
   //   label: 'Excel',
   //   name:'my_if',
@@ -197,6 +220,8 @@ const defaultProps = {
   children: 'children',
   label: 'label',
 }
+
+
 </script>
   
 <style lang="scss" scoped>

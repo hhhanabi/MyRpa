@@ -79,6 +79,48 @@ const codeListStore = defineStore("codeList", {
       }
       this.codeList.push(item)
     },
+    addInput(element:string,content:string) {
+      const item = {
+        name:`对${element}进行模拟人工输入${content}`,
+        id:this.currentId++
+      }
+      this.codeList.push(item)
+    },
+    addMoveMouse(x:string,y:string) {
+      const item = {
+        name:`移动鼠标至(${x},${y})`,
+        id:this.currentId++
+      }
+      this.codeList.push(item)
+    },
+    addMouseClick() {
+      const item = {
+        name:`点击鼠标`,
+        id:this.currentId++
+      }
+      this.codeList.push(item)
+    },
+    addKeyboardInput(content:string) {
+      const item = {
+        name:`模拟人工输入${content}`,
+        id:this.currentId++
+      }
+      this.codeList.push(item)
+    },
+    addGetCurrentMousePosition(x:string,y:string) {
+      const item = {
+        name:`获取当前鼠标位置,保存x坐标至${x},保存y坐标至${y}`,
+        id:this.currentId++
+      }
+      this.codeList.push(item)
+    },
+    addCreateRandomNumber(min:string,max:string,object:string) {
+      const item = {
+        name:`生成一个${min}至${max}间的随机数,保存至${object}`,
+        id:this.currentId++
+      }
+      this.codeList.push(item)
+    },
     getCurrentIds() {
       const array = [];
       for (const code of this.codeList) {

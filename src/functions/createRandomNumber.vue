@@ -5,12 +5,11 @@ import { ref } from 'vue';
 import codeListStore from '@/store/modules/codeList';
 let params = ref<string[]>([])
 let result: string[] = []
-const name = 'saveElement'
-const store = functionStore();
+const name = 'createRandomNumber'
 const addFunction = () => {
-  result.push(`${params.value[2]}=${params.value[1]}.find_element(By.CSS_SELECTOR,"${params.value?.[0]}")`)
-  store.addToCurrentCodes(result);
-  codeListStore().addSaveElement(params.value?.[0],params.value[1],params.value[2])
+  result.push(`${params.value[2]} = random.randint(${params.value[0]}, ${params.value[1]})`)
+  functionStore().addToCurrentCodes(result);
+  codeListStore().addInput(params.value?.[0],params.value[1])
   cancelFunction();
 }
 const cancelFunction = () => {
@@ -24,14 +23,14 @@ const cancelFunction = () => {
 
 <template>
   <el-dialog v-model="functionStore().visible[name]" :title=name width="30%">
-    <el-form style="width: 85%;" :model="params">
-      <el-form-item label="元素路径" label-width="80px">
+    <el-form style="width: 80%;" :model="params">
+      <el-form-item label="最小数" label-width="80px">
         <el-input v-model="params[0]"></el-input>
       </el-form-item>
-      <el-form-item label="网页对象名" label-width="80px">
+      <el-form-item label="最大数" label-width="80px">
         <el-input v-model="params[1]"></el-input>
       </el-form-item>
-      <el-form-item label="元素名" label-width="80px">
+      <el-form-item label="对象名" label-width="80px">
         <el-input v-model="params[2]"></el-input>
       </el-form-item>
     </el-form>
