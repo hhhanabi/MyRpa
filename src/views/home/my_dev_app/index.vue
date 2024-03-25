@@ -115,6 +115,7 @@ const deleteApp = (row: any) => {
 const editApp = (row: any) => {
     useLayoutStore().changeMenu()
     functionStore().setCurrentFilePath(row.path)
+    functionStore().recoverState()
     $router.push('edit')
 }
 const playApp = (pythonFilePath: string) => {

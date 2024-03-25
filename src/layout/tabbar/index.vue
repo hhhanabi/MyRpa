@@ -82,6 +82,7 @@ const leave = ()=>{
 
 const save = ()=>{
     functionStore().writeToCurrentFile();
+    functionStore().clear()
     layoutStore.isMenu=true;
     $router.push('/app/dev')
 }

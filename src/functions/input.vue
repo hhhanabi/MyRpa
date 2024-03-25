@@ -7,7 +7,7 @@ let params = ref<string[]>([])
 let result: string[] = []
 const name = 'input'
 const addFunction = () => {
-  result.push(`${params.value[0]}.send_keys("${params.value[1]}")`)
+  result.push(`${params.value[0]}.send_keys(${params.value[1]})`)
   functionStore().addToCurrentCodes(result);
   codeListStore().addInput(params.value?.[0],params.value[1])
   cancelFunction();

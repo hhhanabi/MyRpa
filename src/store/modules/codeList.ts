@@ -1,6 +1,5 @@
 // In your Pinia store file (functionStore.ts)
 import { defineStore } from "pinia";
-
 const codeListStore = defineStore("codeList", {
   state: (): { codeList: { name: string; id: number }[] ,currentId:number} => {
     return {
@@ -135,6 +134,12 @@ const codeListStore = defineStore("codeList", {
                 break;
             }
         }
+    },
+    getCodeList() {
+      return this.codeList;
+    },
+    setCodeList(codeList:{ name: string; id: number }[]) {
+      this.codeList = codeList
     }
   },
 });

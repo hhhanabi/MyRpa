@@ -78,6 +78,21 @@ const functionStore = defineStore("function", {
             const formattedContent = this.currentCodes
                 .map((codeArray) => codeArray.codes.join("\n")).join("\n")
             fs.writeFileSync(this.currentFilePath + ".py", formattedContent, "utf-8");
+            fs.writeFile(this.currentFilePath+'codes.json', JSON.stringify(this.currentCodes, null, 4), (err: any) => {
+                if (err) {
+                    console.error('Error writing JSON file:', err);
+                    return;
+                }
+                console.log('Data has been written to data.json');
+            });
+            const codeList = codeListStore().getCodeList()
+            fs.writeFile(this.currentFilePath+'codeList.json', JSON.stringify(codeList, null, 4), (err: any) => {
+                if (err) {
+                    console.error('Error writing JSON file:', err);
+                    return;
+                }
+                console.log('Data has been written to data.json');
+            });
         },
         adjustCurrentCodes(currentIds: number[]) {
             // 根据 currentIds 重新调整 currentCodes 的顺序
@@ -101,6 +116,30 @@ const functionStore = defineStore("function", {
                 }
             }
         },
+        recoverState() {
+            fs.readFile(this.currentFilePath+'codes.json', 'utf8', (err:any, data:any) => {
+                if (err) {
+                    console.error('Error reading JSON file:', err);
+                    return;
+                }
+                // 解析 JSON 字符串为 JavaScript 对象
+                const jsonData = JSON.parse(data);
+                this.currentCodes=jsonData
+            });
+            fs.readFile(this.currentFilePath+'codeList.json', 'utf8', (err:any, data:any) => {
+                if (err) {
+                    console.error('Error reading JSON file:', err);
+                    return;
+                }
+                // 解析 JSON 字符串为 JavaScript 对象
+                const jsonData = JSON.parse(data);
+                codeListStore().setCodeList(jsonData)
+            });
+        },
+        clear() {
+            this.currentCodes=[]
+            codeListStore().setCodeList([])
+        }
     },
 });
 
