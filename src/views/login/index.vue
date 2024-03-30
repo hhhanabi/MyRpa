@@ -12,6 +12,7 @@
                 </el-form-item>
                 <el-form-item>
                     <el-button @click="login(loginFormRef)" type="primary" class="button" :loading="loading">登录</el-button>
+                    <el-button @click="register(loginFormRef)" type="primary" class="button" :loading="loading">注册</el-button>
                 </el-form-item>
             </el-col>
         </el-form>
@@ -33,7 +34,7 @@ let loginForm = reactive({
 const rules = {
     username: [
         { required: true, message: '用户名不能为空', trigger: 'change' },
-        { min: 3, max: 5, message: '账号长度应为3-5位', trigger: 'change' },
+        { min: 3, max: 11, message: '账号长度应为3-11位', trigger: 'change' },
     ],
     password: [
         { required: true, message: '密码不能为空', trigger: 'change' }
@@ -50,8 +51,28 @@ const login = async (formEl: FormInstance | undefined) => {
     await formEl.validate()
     try {
         await useStore.login(loginForm)
-        await useStore.userInfo()
-        $router.push('/')
+        // await useStore.userInfo()
+        $router.push('/app/dev')
+        ElNotification({
+            type: 'success',
+            message: getTime()
+        })
+    } catch (error) {
+        loading.value = false
+        ElNotification({
+            type: 'error',
+            message: (error as Error).message
+        })
+    }
+}
+
+const register = async (formEl: FormInstance | undefined) => {
+    loading.value = true
+    if (!formEl) return
+    await formEl.validate()
+    try {
+        await useStore.register(loginForm)
+        $router.push('/app/dev')
         ElNotification({
             type: 'success',
             message: getTime()

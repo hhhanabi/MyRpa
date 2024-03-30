@@ -6,7 +6,6 @@ export interface loginForm{
 interface responseData {
     code:number,
     message:string,
-    ok:boolean
 }
 
 export interface loginResponseData extends responseData{
