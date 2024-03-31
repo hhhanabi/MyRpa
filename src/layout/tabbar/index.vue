@@ -6,7 +6,7 @@
         <div class="tabbar_middle">
             <el-button icon="ArrowLeft" circle class="noDrag" v-show="!layoutStore.isMenu" @click="leave()"></el-button>
             <el-button icon="DocumentAdd"  class="noDrag" v-show="!layoutStore.isMenu" @click="save()"></el-button>
-            <el-button class="noDrag" v-show="!layoutStore.isMenu" @click="capture()">捕获元素</el-button>
+            <!-- <el-button class="noDrag" v-show="!layoutStore.isMenu" @click="capture()">捕获元素</el-button> -->
         </div>
         <div class="tabbar_right noDrag">
             <el-popover placement="top-start" :width="200" trigger="hover">
@@ -87,9 +87,9 @@ const save = ()=>{
     $router.push('/app/dev')
 }
 
-const capture = ()=>{
-    captureDialogRef.value!.switchVisible()
-}
+// const capture = ()=>{
+//     captureDialogRef.value!.switchVisible()
+// }
 </script>
 
 <style lang="scss" scoped>

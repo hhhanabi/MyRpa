@@ -4,22 +4,28 @@
             <template #header>
                 <div class="card-header">
                     <div class="left">
-                        <span>我获取的应用</span>
+                        <el-upload class="upload-demo" action="http://localhost:8080/file/upload" multiple
+                            :on-preview="handlePreview" :on-remove="handleRemove" :before-remove="beforeRemove" :limit="10"
+                            :headers="headers" :on-exceed="handleExceed" :data="formData" :before-upload="beforeUpload"
+                            :show-file-list=false>
+                            <el-button type="primary" round>上传</el-button>
+                            <template #tip>
+                                <div class="el-upload__tip">
+
+                                </div>
+                            </template>
+                        </el-upload>
                     </div>
-                    <el-input v-model="keyword" placeholder="搜索应用" @blur="getFilterApps" @keyup.enter="getFilterApps"/>
+                    <el-input v-model="keyword" placeholder="搜索应用" @blur="getFilterApps" @keyup.enter="getFilterApps" />
                 </div>
             </template>
             <el-table :data="filterApps" style="width: 100%">
                 <el-table-column prop="name" label="应用名称" width="300px">
                 </el-table-column>
                 <el-table-column label="应用描述" prop="description"></el-table-column>
-                <el-table-column label="更新时间" prop="updated_time">
-                </el-table-column>
-                <el-table-column  label="操作" width="300px">
+                <el-table-column label="操作" width="300px">
                     <template #="{ row }">
-                        <el-button icon="VideoPlay" circle />
-                        <el-button icon="Edit" circle />
-                        <el-button icon="Delete" circle @click="deleteApp(row.name)"/>
+                        <el-button icon="Download" circle @click="download(row)" />
                     </template>
                 </el-table-column>
             </el-table>
@@ -35,9 +41,9 @@
             </el-form>
             <template #footer>
                 <span class="dialog-footer">
-                    <el-button @click="dialogVisible = false">Cancel</el-button>
+                    <el-button @click="dialogVisible = false;">取消</el-button>
                     <el-button type="primary" @click="addApp">
-                        Confirm
+                        确定
                     </el-button>
                 </span>
             </template>
@@ -46,79 +52,139 @@
 </template>
 
 <script lang="ts" setup>
-import { app } from '@/api/app/type';
-import {  onMounted, ref } from 'vue';
+import { onMounted, ref } from 'vue';
+import { ElNotification } from 'element-plus';
+import { ElMessage, ElMessageBox } from 'element-plus'
+
+import type { UploadProps, UploadUserFile } from 'element-plus'
+import useUserStore from '@/store/modules/user';
+import { reqGetFileList } from '@/api/app/get_app';
+const fs = require('fs');
 
 
+const formData = ref<Record<string, any>>({});
 let dialogVisible = ref<boolean>(false)
 let keyword = ref<string>();
-// let pageNo = ref<number>(1);
-// //每一页展示多少条数据
-// let limit = ref<number>(5);
-// //数据总数
-// let total = ref<number>(0);
-//存储已有应用的数据
-let totalApps = ref<app[]>([]);
+type file = {
+    name: '',
+    description: '',
+    url:'',
+    id:''
+}
+let totalApps = ref<file[]>([]);
 
-let filterApps = ref<app[]>([]);
+let filterApps = ref<file[]>([]);
+const setFolderName = (file: File) => {
+    // 获取第一个文件的名称作为文件夹名称
+    const folderName = file.name.split('.')[0];
+    formData.value.folderName = folderName;
+};
 
-// const getHasApps = async (pager = 1) => {
-//     //当前页码
-//     pageNo.value = pager;
-//     let result: any = await reqHasApps(pageNo.value, limit.value);
-//     if (result.code == 200) {
-
-//         total.value = result.data.total;
-//         totalApps.value = result.data.records;
-//     }
-// }
-// //组件挂载完毕钩子---发一次请求,获取第一页、一页三个已有应用数据
-
-const getFilterApps = ()=>{
-    if(!keyword.value){
-        filterApps.value=totalApps.value
+const beforeUpload = (file: File) => {
+    if (file.name.endsWith('.py')) {
+        setFolderName(file);
+      }
+};
+const headers = {
+    Authorization: `Bearer ${useUserStore().token}`
+}
+const getFilterApps = () => {
+    if (!keyword.value) {
+        filterApps.value = totalApps.value
         return
     }
-    else{
-        filterApps.value = totalApps.value.filter(v=>v.name.includes(keyword.value as string))
+    else {
+        filterApps.value = totalApps.value.filter(v => v.name.includes(keyword.value as string))
     }
 }
-const appInfo = ref<app>({
-    name:'',
-    description:'',
-    updated_time:''
+const appInfo = ref<file>({
+    name: '',
+    description: '',
+    url:'',
+    id:''
 })
-const addApp = ()=>{
-    totalApps.value.push(appInfo.value as app)
+const baseDir = "r://test//"
+const addApp = () => {
+    try {
+        fs.mkdirSync(`${baseDir}/${appInfo.value.name}`)
+        fs.writeFileSync(`${baseDir}/${appInfo.value.name}/${appInfo.value.name}.py`, '')
+        fs.writeFileSync(`${baseDir}/${appInfo.value.name}/description.txt`, `${appInfo.value.description}`)
+    } catch (error) {
+        ElNotification({
+            type: 'error',
+            message: (error as NodeJS.ErrnoException).message
+        })
+        return
+    }
+    ElNotification({
+        type: 'success',
+        message: '创建成功'
+    })
+    totalApps.value.push(appInfo.value)
     dialogVisible.value = false
 }
-const deleteApp = (id:string)=>{
-    totalApps.value=totalApps.value.filter(v=>v.name!==id)
-    filterApps.value=totalApps.value
+const getFileList = async () => {
+    const result = await reqGetFileList()
+    if (result.code == 200) {
+        //存储已有品牌总个数
+        totalApps.value = result.data;
+        filterApps.value = result.data;
+    } 
+}
+import request from "@/utils/request";
+const download = async (row:any) => {
+    const url = `/uploadFile/${row.url}/${row.url}.py`
+    const result =await request.get(url,{ responseType: 'arraybuffer'})
+    const codes =await request.get(`/uploadFile/${row.url}/${row.url}codes.json`,{ responseType: 'arraybuffer'})
+    const codeList =await request.get(`/uploadFile/${row.url}/${row.url}codeList.json`,{ responseType: 'arraybuffer'})
+    console.log(result);
+    try {
+        fs.mkdirSync(`${baseDir}/${row.url}`)
+        fs.writeFileSync(`${baseDir}/${row.url}/${row.url}.py`, Buffer.from(result))
+        fs.writeFileSync(`${baseDir}/${row.url}/description.txt`, `${row.description}`)
+        fs.writeFileSync(`${baseDir}/${row.url}/${row.url}codes.json`, `${Buffer.from(codes)}`)
+        fs.writeFileSync(`${baseDir}/${row.url}/${row.url}codeList.json`, `${Buffer.from(codeList)}`)
+    } catch (error) {
+        ElNotification({
+            type: 'error',
+            message: (error as NodeJS.ErrnoException).message
+        })
+        console.log(error);
+        return
+    }
+    ElNotification({
+        type: 'success',
+        message: '创建成功'
+    })
 }
 onMounted(() => {
-    totalApps.value = [
-        {
-            name:'test1',
-            description:'test1',
-            updated_time:'2023-07-08'
-        },
-        {
-            name:'test2',
-            description:'test1',
-            updated_time:'2023-07-08'
-        },
-        {
-            name:'test3',
-            description:'test1',
-            updated_time:'2023-07-08'
-        }
-    ]
-    filterApps.value=totalApps.value
-    // getHasApps();
+    getFileList()
 });
 
 
+const handleRemove: UploadProps['onRemove'] = (file, uploadFiles) => {
+    console.log(file, uploadFiles)
+}
+
+const handlePreview: UploadProps['onPreview'] = (uploadFile) => {
+    console.log(uploadFile)
+}
+
+const handleExceed: UploadProps['onExceed'] = (files, uploadFiles) => {
+    ElMessage.warning(
+        `The limit is 3, you selected ${files.length} files this time, add up to ${files.length + uploadFiles.length
+        } totally`
+    )
+}
+
+const beforeRemove: UploadProps['beforeRemove'] = (uploadFile, uploadFiles) => {
+    return ElMessageBox.confirm(
+        `Cancel the transfer of ${uploadFile.name} ?`
+    ).then(
+        () => true,
+        () => false
+    )
+}
 </script>
 
 <style  lang="scss">
@@ -128,6 +194,8 @@ onMounted(() => {
     font-weight: bold;
 
     .left {
+        display: flex;
+        justify-content: space-between;
         span {
             margin-right: 10px;
         }

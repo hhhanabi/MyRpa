@@ -50,7 +50,7 @@ export const constantRoute = [
                     component:()=>import('../views/home/my_dev_app/index.vue'),
                     name:'dev_app',
                     meta:{
-                        title:'我开发的应用',
+                        title:'本地应用',
                         hidden:false,
                         icon:'User'
                     }
@@ -60,7 +60,7 @@ export const constantRoute = [
                     component:()=>import('../views/home/my_get_app/index.vue'),
                     name:'get_app',
                     meta:{
-                        title:'我获取的应用',
+                        title:'应用市场',
                         hidden:false,
                         icon:'Monitor'
                     }
