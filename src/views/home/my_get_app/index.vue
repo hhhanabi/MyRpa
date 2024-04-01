@@ -29,6 +29,7 @@
                     </template>
                 </el-table-column>
             </el-table>
+        <el-pagination layout="prev, pager, next" :total="10" />
         </el-card>
         <el-dialog v-model="dialogVisible" title="Tips" width="30%">
             <el-form style="width: 80%;" :model="appInfo">
@@ -56,7 +57,7 @@ import { onMounted, ref } from 'vue';
 import { ElNotification } from 'element-plus';
 import { ElMessage, ElMessageBox } from 'element-plus'
 
-import type { UploadProps, UploadUserFile } from 'element-plus'
+import type { UploadProps } from 'element-plus'
 import useUserStore from '@/store/modules/user';
 import { reqGetFileList } from '@/api/app/get_app';
 const fs = require('fs');
@@ -103,7 +104,7 @@ const appInfo = ref<file>({
     url:'',
     id:''
 })
-const baseDir = "r://test//"
+const baseDir = "d://test//"
 const addApp = () => {
     try {
         fs.mkdirSync(`${baseDir}/${appInfo.value.name}`)
@@ -178,6 +179,7 @@ const handleExceed: UploadProps['onExceed'] = (files, uploadFiles) => {
 }
 
 const beforeRemove: UploadProps['beforeRemove'] = (uploadFile, uploadFiles) => {
+    console.log(uploadFiles);
     return ElMessageBox.confirm(
         `Cancel the transfer of ${uploadFile.name} ?`
     ).then(
@@ -236,5 +238,8 @@ const beforeRemove: UploadProps['beforeRemove'] = (uploadFile, uploadFiles) => {
     width: 178px;
     height: 178px;
     display: block;
+}
+.el-pagination {
+    justify-content: center
 }
 </style>

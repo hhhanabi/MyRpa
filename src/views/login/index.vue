@@ -75,7 +75,7 @@ const register = async (formEl: FormInstance | undefined) => {
         $router.push('/app/dev')
         ElNotification({
             type: 'success',
-            message: getTime()
+            message: '注册成功'
         })
     } catch (error) {
         loading.value = false
@@ -84,6 +84,7 @@ const register = async (formEl: FormInstance | undefined) => {
             message: (error as Error).message
         })
     }
+    loading.value = false
 }
 
 

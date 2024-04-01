@@ -24,6 +24,7 @@
                     </template>
                 </el-table-column>
             </el-table>
+            <el-pagination layout="prev, pager, next" :total="10" />
         </el-card>
         <el-dialog v-model="dialogVisible" title="Tips" width="30%">
             <el-form style="width: 80%;" :model="appInfo">
@@ -80,7 +81,7 @@ const appInfo = ref<app>({
     updated_time: '',
     path: ''
 })
-const baseDir = "r://test//"
+const baseDir = "d://test//"
 const addApp = () => {
     try {
         fs.mkdirSync(`${baseDir}/${appInfo.value.name}`)
@@ -221,5 +222,9 @@ onMounted(() => {
     width: 178px;
     height: 178px;
     display: block;
+}
+
+.el-pagination {
+    justify-content: center
 }
 </style>
