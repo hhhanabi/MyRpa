@@ -4,7 +4,6 @@
             <template #header>
                 <div class="card-header">
                     <div class="left">
-                        <span>我开发的应用</span>
                         <el-button icon="Plus" type="danger" round @click="dialogVisible = !dialogVisible">新建应用</el-button>
                     </div>
                     <el-input v-model="keyword" placeholder="搜索应用" @blur="getFilterApps" @keyup.enter="getFilterApps" />
@@ -102,6 +101,7 @@ const addApp = () => {
     dialogVisible.value = false
 }
 const deleteApp = (row: any) => {
+    console.log(row.path)
     const folderPath = path.dirname(row.path)
     try {
         // 删除文件夹及其内容
@@ -129,8 +129,10 @@ const playApp = (pythonFilePath: string) => {
             console.error(`执行命令时出错: ${error}`);
             return;
         }
-
-        console.log(`Python脚本执行结果:\n${stdout}`);
+        ElNotification({
+            type: 'error',
+            message: stdout
+        })
     })
 }
 onMounted(() => {

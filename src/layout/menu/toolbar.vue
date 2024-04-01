@@ -16,6 +16,9 @@
     <GetCurrentMousePosition></GetCurrentMousePosition>
     <CreateRandomNumber></CreateRandomNumber>
     <KeyboardInput></KeyboardInput>
+    <Wait></Wait>
+    <uploadFile></uploadFile>
+    <explicitlyWait></explicitlyWait>
   </div>
 </template>
   
@@ -37,6 +40,9 @@ import MoveMouse from '@/functions/moveMouse.vue';
 import GetCurrentMousePosition from '@/functions/getCurrentMousePosition.vue';
 import CreateRandomNumber from '@/functions/createRandomNumber.vue';
 import KeyboardInput from '@/functions/keyboardInput.vue';
+import Wait from '@/functions/wait.vue';
+import uploadFile from '@/functions/fileUpload.vue'
+import explicitlyWait from '@/functions/explicitlyWait.vue'
 
 
 interface Tree {
@@ -131,6 +137,18 @@ const data: Tree[] = [
       {
         label: '清空元素',
         name:'clear'
+      },
+      {
+        label:'隐式等待',
+        name:'wait'
+      },
+      {
+        label:'显式等待',
+        name:'explicitlyWait'
+      },
+      {
+        label:'文件上传',
+        name:'fileUpload'
       }
     ],
   },

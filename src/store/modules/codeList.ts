@@ -31,7 +31,7 @@ const codeListStore = defineStore("codeList", {
     },
     addWait(time:string){
       const item = {
-        name:`等待${time}秒`,
+        name:`隐式等待${time}秒`,
         id:this.currentId++
       }
       this.codeList.push(item)
@@ -46,6 +46,20 @@ const codeListStore = defineStore("codeList", {
     addClick(element:string) {
       const item = {
         name:`点击元素${element}`,
+        id:this.currentId++
+      }
+      this.codeList.push(item)
+    },
+    addUploadFile(element:string,path:string) {
+      const item = {
+        name:`点击元素${element}上传${path}`,
+        id:this.currentId++
+      }
+      this.codeList.push(item)
+    },
+    addExplicitlyWait(time:string) {
+      const item = {
+        name:`显式等待${time}秒`,
         id:this.currentId++
       }
       this.codeList.push(item)

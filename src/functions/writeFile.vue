@@ -8,7 +8,7 @@ let result: string[] = []
 const name = 'writeFile'
 const addFunction = () => {
   result.push(`with open('${params.value[0]}', 'r',encoding='utf-8') as file:`)
-  result.push(`\tfile.write('${params.value[1]}')`)
+  result.push(`\tfile.write(r'${params.value[1]}')`)
   functionStore().addToCurrentCodes(result);
   codeListStore().addWriteFile(params.value?.[0],params.value[1])
   cancelFunction();

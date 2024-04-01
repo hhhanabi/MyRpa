@@ -27,18 +27,25 @@ const functionStore = defineStore("function", {
                 getCurrentMousePosition:false,
                 keyboardInput:false,
                 mouseClick:false,
-                moveMouse:false
+                moveMouse:false,
+                wait:false,
+                fileUpload:false,
+                explicitlyWait:false,
                 // Initialize other properties as needed
             },
             currentCodes: [
                 {
                     id: 0,
                     codes: [
+                        'import time',
                         "from selenium import webdriver",
                         "from selenium.webdriver.chrome.options import Options",
                         "from selenium.webdriver.common.by import By",
+                        'from selenium.webdriver import ActionChains',
+                        `import pyautogui`,
                         "chrome_options = Options()",
-                        `chrome_options.add_experimental_option("debuggerAddress", "127.0.0.1:9222")`
+                        `chrome_options.add_experimental_option("debuggerAddress", "127.0.0.1:9222")`,
+                        ''
                     ],
                 },
             ],

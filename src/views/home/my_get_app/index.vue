@@ -8,7 +8,7 @@
                             :on-preview="handlePreview" :on-remove="handleRemove" :before-remove="beforeRemove" :limit="10"
                             :headers="headers" :on-exceed="handleExceed" :data="formData" :before-upload="beforeUpload"
                             :show-file-list=false>
-                            <el-button type="primary" round>上传</el-button>
+                            <el-button type="primary" round icon="Upload">上传应用</el-button>
                             <template #tip>
                                 <div class="el-upload__tip">
 

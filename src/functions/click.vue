@@ -8,7 +8,7 @@ let result: string[] = []
 const name = 'click'
 const store = functionStore();
 const addFunction = () => {
-  result.push(`${params.value?.[0]}.click()`)
+  result.push(`actions.click(${params.value?.[0]}).perform()`)
   store.addToCurrentCodes(result);
   codeListStore().addClick(params.value?.[0])
   cancelFunction();
