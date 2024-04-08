@@ -19,6 +19,7 @@
                     <template #="{ row }">
                         <el-button icon="VideoPlay" circle @click="playApp(row.path)" />
                         <el-button icon="Edit" circle @click="editApp(row)" />
+                        <el-button circle icon="Upload" @click="uploadApp(row)"></el-button>
                         <el-button icon="Delete" circle @click="deleteApp(row)" />
                     </template>
                 </el-table-column>
@@ -53,6 +54,8 @@ import useLayoutStore from '@/store/modules/layout';
 import { useRouter } from 'vue-router'
 import { ElNotification } from 'element-plus';
 import functionStore from '@/store/modules/function'
+import request from '@/utils/request';
+import useUserStore from '@/store/modules/user';
 const fs = require('fs');
 const path = require('path')
 const { exec } = require('child_process');
@@ -78,13 +81,39 @@ const appInfo = ref<app>({
     name: '',
     description: '',
     updated_time: '',
-    path: ''
+    path: '',
+    folderPath:''
 })
 const baseDir = "d://test//"
 const addApp = () => {
     try {
         fs.mkdirSync(`${baseDir}/${appInfo.value.name}`)
         fs.writeFileSync(`${baseDir}/${appInfo.value.name}/${appInfo.value.name}.py`, '')
+        fs.writeFileSync(`${baseDir}/${appInfo.value.name}/${appInfo.value.name}currentId.json`, `1`)
+        fs.writeFileSync(`${baseDir}/${appInfo.value.name}/${appInfo.value.name}codeList.json`, ``)
+        const currentCodes = [
+            {
+                id: 0,
+                codes: [
+                    'import time',
+                    "from selenium import webdriver",
+                    "from selenium.webdriver.chrome.options import Options",
+                    "from selenium.webdriver.common.by import By",
+                    'from selenium.webdriver import ActionChains',
+                    `import pyautogui`,
+                    "chrome_options = Options()",
+                    `chrome_options.add_experimental_option("debuggerAddress", "127.0.0.1:9222")`,
+                ],
+            },
+        ]
+        fs.writeFile(`${baseDir}/${appInfo.value.name}/${appInfo.value.name}codes.json`, JSON.stringify(currentCodes, null, 4), (err: any) => {
+            if (err) {
+                console.error('Error writing JSON file:', err);
+                return;
+            }
+            console.log('Data has been written to data.json');
+        });
+        fs.writeFileSync(`${baseDir}/${appInfo.value.name}/${appInfo.value.name}codes.json`, ``)
         fs.writeFileSync(`${baseDir}/${appInfo.value.name}/description.txt`, `${appInfo.value.description}`)
     } catch (error) {
         ElNotification({
@@ -97,8 +126,8 @@ const addApp = () => {
         type: 'success',
         message: '创建成功'
     })
-    totalApps.value.push(appInfo.value as app)
     dialogVisible.value = false
+    loadInfo()
 }
 const deleteApp = (row: any) => {
     console.log(row.path)
@@ -107,7 +136,7 @@ const deleteApp = (row: any) => {
         // 删除文件夹及其内容
         fs.rmdirSync(folderPath, { recursive: true });
         console.log(`文件夹 ${folderPath} 已成功删除`);
-    } catch (error:any) {
+    } catch (error: any) {
         console.error(`删除文件夹时出错: ${error.message}`);
     }
     totalApps.value = totalApps.value.filter(v => v.name !== row.name)
@@ -118,6 +147,30 @@ const editApp = (row: any) => {
     functionStore().setCurrentFilePath(row.path)
     functionStore().recoverState()
     $router.push('edit')
+}
+const uploadApp = (row: any) => {
+
+    // 创建 FormData 对象，并将文件添加到其中
+    const formDataPy = new FormData();
+    formDataPy.append('file', `${row.path}.py`);
+    const formDataId = new FormData();
+    formDataId.append('file', `${row.path}currentId.json`);
+    const formDataCodes = new FormData();
+    formDataCodes.append('file', `${row.path}codes.json`);
+    const formDataCodeList = new FormData();
+    formDataCodeList.append('file', `${row.path}codeList.json`);
+    const formDataDescription = new FormData();
+    const fileDescription =new Blob(fs.readFileSync(`${row.folderPath}/description.txt`));
+    formDataDescription.append('file', fileDescription,'description.txt')
+    formDataDescription.append('folderName', row.name)
+    formDataDescription.append('uploader', useUserStore().username)
+    // 使用 Axios 发送 POST 请求
+    request.post('/file/upload', formDataDescription, {
+        headers: {
+            'Content-Type': 'multipart/form-data'
+        }
+    })
+
 }
 const playApp = (pythonFilePath: string) => {
     // 构建要执行的命令
@@ -135,7 +188,7 @@ const playApp = (pythonFilePath: string) => {
         })
     })
 }
-onMounted(() => {
+const loadInfo = () => {
     try {
         const folders = fs.readdirSync(baseDir, { withFileTypes: true })
             .filter((dirent: { isDirectory: () => any; }) => dirent.isDirectory())
@@ -164,7 +217,8 @@ onMounted(() => {
                 name: folder,
                 description: description,
                 updated_time: updatedTime.slice(0, 10),
-                path: path.join(folderPath, folder)
+                path: path.join(folderPath, folder),
+                folderPath:folderPath
             };
         });
 
@@ -172,6 +226,9 @@ onMounted(() => {
     } catch (error) {
         console.error('Error reading directories:', error);
     }
+}
+onMounted(() => {
+    loadInfo()
 });
 
 

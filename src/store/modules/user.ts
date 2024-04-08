@@ -28,7 +28,6 @@ let useUserStore = defineStore('User', {
             let result = await reqUserInfo()
             if (result.code === 200) {
                 this.username = result.data.name;
-                this.avatar = result.data.avatar;
                 return 'ok'
             } else {
                 return Promise.reject(new Error(result.message));

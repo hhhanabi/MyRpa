@@ -33,22 +33,7 @@ const functionStore = defineStore("function", {
                 explicitlyWait:false,
                 // Initialize other properties as needed
             },
-            currentCodes: [
-                {
-                    id: 0,
-                    codes: [
-                        'import time',
-                        "from selenium import webdriver",
-                        "from selenium.webdriver.chrome.options import Options",
-                        "from selenium.webdriver.common.by import By",
-                        'from selenium.webdriver import ActionChains',
-                        `import pyautogui`,
-                        "chrome_options = Options()",
-                        `chrome_options.add_experimental_option("debuggerAddress", "127.0.0.1:9222")`,
-                        ''
-                    ],
-                },
-            ],
+            currentCodes: [],
             currentFilePath: "",
         };
     },
@@ -100,6 +85,7 @@ const functionStore = defineStore("function", {
                 }
                 console.log('Data has been written to data.json');
             });
+            fs.writeFileSync(this.currentFilePath+'currentId.json', JSON.stringify(this.currentId, null, 4));
         },
         adjustCurrentCodes(currentIds: number[]) {
             // 根据 currentIds 重新调整 currentCodes 的顺序
@@ -142,8 +128,18 @@ const functionStore = defineStore("function", {
                 const jsonData = JSON.parse(data);
                 codeListStore().setCodeList(jsonData)
             });
+            try {
+                const data = JSON.parse(fs.readFileSync(this.currentFilePath+'currentId.json', 'utf8'));
+                this.currentId = data
+                codeListStore().setCurrentId(data)
+            } catch (err) {
+                // 如果文件不存在或出现其他错误，则返回默认值
+               console.log("failed to read currentId");
+               
+            }
         },
         clear() {
+            this.currentId=1
             this.currentCodes=[]
             codeListStore().setCodeList([])
         }

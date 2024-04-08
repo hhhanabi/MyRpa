@@ -53,6 +53,7 @@ const login = async (formEl: FormInstance | undefined) => {
         await useStore.login(loginForm)
         // await useStore.userInfo()
         $router.push('/app/dev')
+        useUserStore().username = loginForm.username
         ElNotification({
             type: 'success',
             message: getTime()

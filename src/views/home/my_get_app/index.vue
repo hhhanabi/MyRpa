@@ -84,6 +84,7 @@ const setFolderName = (file: File) => {
 const beforeUpload = (file: File) => {
     if (file.name.endsWith('.py')) {
         setFolderName(file);
+        formData.value.username=useUserStore().username;
       }
 };
 const headers = {
@@ -138,6 +139,7 @@ const download = async (row:any) => {
     const result =await request.get(url,{ responseType: 'arraybuffer'})
     const codes =await request.get(`/uploadFile/${row.url}/${row.url}codes.json`,{ responseType: 'arraybuffer'})
     const codeList =await request.get(`/uploadFile/${row.url}/${row.url}codeList.json`,{ responseType: 'arraybuffer'})
+    const currentId =await request.get(`/uploadFile/${row.url}/${row.url}currentId.json`,{ responseType: 'arraybuffer'})
     console.log(result);
     try {
         fs.mkdirSync(`${baseDir}/${row.url}`)
@@ -145,6 +147,7 @@ const download = async (row:any) => {
         fs.writeFileSync(`${baseDir}/${row.url}/description.txt`, `${row.description}`)
         fs.writeFileSync(`${baseDir}/${row.url}/${row.url}codes.json`, `${Buffer.from(codes)}`)
         fs.writeFileSync(`${baseDir}/${row.url}/${row.url}codeList.json`, `${Buffer.from(codeList)}`)
+        fs.writeFileSync(`${baseDir}/${row.url}/${row.url}currentId.json`, `${Buffer.from(currentId)}`)
     } catch (error) {
         ElNotification({
             type: 'error',

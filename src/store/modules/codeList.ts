@@ -154,6 +154,9 @@ const codeListStore = defineStore("codeList", {
     },
     setCodeList(codeList:{ name: string; id: number }[]) {
       this.codeList = codeList
+    },
+    setCurrentId(id:number) {
+      this.currentId = id
     }
   },
 });

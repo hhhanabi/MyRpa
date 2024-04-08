@@ -3,4 +3,5 @@ export interface app{
      description:string
      updated_time:String
      path:string
+     folderPath:string
 }
