@@ -8,7 +8,7 @@ let result: string[] = []
 const name = 'closeWeb'
 const store = functionStore();
 const addFunction = () => {
-  result.push(params.value?.[0] + ".quit()")
+  result.push(params.value?.[0] + ".close()")
   store.addToCurrentCodes(result);
   codeListStore().addCloseWeb(params.value?.[0])
   cancelFunction();
