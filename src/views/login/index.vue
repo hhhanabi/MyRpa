@@ -48,8 +48,8 @@ const loginFormRef=ref<FormInstance>()
 const login = async (formEl: FormInstance | undefined) => {
     loading.value = true
     if (!formEl) return
-    await formEl.validate()
     try {
+        await formEl.validate()
         await useStore.login(loginForm)
         // await useStore.userInfo()
         $router.push('/app/dev')
@@ -62,7 +62,7 @@ const login = async (formEl: FormInstance | undefined) => {
         loading.value = false
         ElNotification({
             type: 'error',
-            message: (error as Error).message
+            message: '用户名或密码错误'
         })
     }
 }
