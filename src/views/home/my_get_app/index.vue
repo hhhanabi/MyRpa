@@ -5,10 +5,10 @@
                 <div class="card-header">
                     <div class="left">
                         <el-upload class="upload-demo" action="http://localhost:8080/file/upload" multiple
-                            :on-preview="handlePreview" :on-remove="handleRemove" :before-remove="beforeRemove" :limit="10"
-                            :headers="headers" :on-exceed="handleExceed" :data="formData" :before-upload="beforeUpload"
-                            :show-file-list=false>
-                            <el-button type="primary" round icon="Upload">上传应用</el-button>
+                            :on-preview="handlePreview" :on-remove="handleRemove" :before-remove="beforeRemove"
+                            :limit="10" :headers="headers" :on-exceed="handleExceed" :data="formData"
+                            :before-upload="beforeUpload" :show-file-list=false>
+                            <!-- <el-button type="primary" round icon="Upload">上传应用</el-button> -->
                             <template #tip>
                                 <div class="el-upload__tip">
 
@@ -26,10 +26,11 @@
                 <el-table-column label="操作" width="300px">
                     <template #="{ row }">
                         <el-button icon="Download" circle @click="download(row)" />
+                        <el-button icon="Delete" circle @click="deleteApp(row)" />
                     </template>
                 </el-table-column>
             </el-table>
-        <el-pagination layout="prev, pager, next" :total="10" />
+            <el-pagination layout="prev, pager, next" :total="10" />
         </el-card>
         <el-dialog v-model="dialogVisible" title="Tips" width="30%">
             <el-form style="width: 80%;" :model="appInfo">
@@ -69,8 +70,8 @@ let keyword = ref<string>();
 type file = {
     name: '',
     description: '',
-    url:'',
-    id:''
+    url: '',
+    id: ''
 }
 let totalApps = ref<file[]>([]);
 
@@ -84,8 +85,8 @@ const setFolderName = (file: File) => {
 const beforeUpload = (file: File) => {
     if (file.name.endsWith('.py')) {
         setFolderName(file);
-        formData.value.username=useUserStore().username;
-      }
+        formData.value.username = useUserStore().username;
+    }
 };
 const headers = {
     Authorization: `Bearer ${useUserStore().token}`
@@ -102,8 +103,8 @@ const getFilterApps = () => {
 const appInfo = ref<file>({
     name: '',
     description: '',
-    url:'',
-    id:''
+    url: '',
+    id: ''
 })
 const baseDir = "d://test//"
 const addApp = () => {
@@ -131,15 +132,31 @@ const getFileList = async () => {
         //存储已有品牌总个数
         totalApps.value = result.data;
         filterApps.value = result.data;
-    } 
+    }
 }
 import request from "@/utils/request";
-const download = async (row:any) => {
+const deleteApp = async (row: any) => {
+    const result = await request.delete(`/file?id=${row.id}`);
+    if (result.code != 200) {
+        ElNotification({
+            type: 'error',
+            message: '删除失败'
+        })
+    } else {
+        ElNotification({
+            type: 'success',
+            message: '删除成功'
+        })
+        getFileList()
+    }
+}
+
+const download = async (row: any) => {
     const url = `/uploadFile/${row.url}/${row.url}.py`
-    const result =await request.get(url,{ responseType: 'arraybuffer'})
-    const codes =await request.get(`/uploadFile/${row.url}/${row.url}codes.json`,{ responseType: 'arraybuffer'})
-    const codeList =await request.get(`/uploadFile/${row.url}/${row.url}codeList.json`,{ responseType: 'arraybuffer'})
-    const currentId =await request.get(`/uploadFile/${row.url}/${row.url}currentId.json`,{ responseType: 'arraybuffer'})
+    const result = await request.get(url, { responseType: 'arraybuffer' })
+    const codes = await request.get(`/uploadFile/${row.url}/${row.url}codes.json`, { responseType: 'arraybuffer' })
+    const codeList = await request.get(`/uploadFile/${row.url}/${row.url}codeList.json`, { responseType: 'arraybuffer' })
+    const currentId = await request.get(`/uploadFile/${row.url}/${row.url}currentId.json`, { responseType: 'arraybuffer' })
     console.log(result);
     try {
         fs.mkdirSync(`${baseDir}/${row.url}`)
@@ -192,7 +209,7 @@ const beforeRemove: UploadProps['beforeRemove'] = (uploadFile, uploadFiles) => {
 }
 </script>
 
-<style  lang="scss">
+<style lang="scss">
 .card-header {
     display: flex;
     justify-content: space-between;
@@ -201,6 +218,7 @@ const beforeRemove: UploadProps['beforeRemove'] = (uploadFile, uploadFiles) => {
     .left {
         display: flex;
         justify-content: space-between;
+
         span {
             margin-right: 10px;
         }
@@ -242,6 +260,7 @@ const beforeRemove: UploadProps['beforeRemove'] = (uploadFile, uploadFiles) => {
     height: 178px;
     display: block;
 }
+
 .el-pagination {
     justify-content: center
 }

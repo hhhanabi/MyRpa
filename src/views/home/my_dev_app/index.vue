@@ -19,7 +19,7 @@
                     <template #="{ row }">
                         <el-button icon="VideoPlay" circle @click="playApp(row.path)" />
                         <el-button icon="Edit" circle @click="editApp(row)" />
-                        <el-button circle icon="Upload" @click="uploadApp(row)"></el-button>
+                        <!-- <el-button circle icon="Upload" @click="uploadApp(row)"></el-button> -->
                         <el-button icon="Delete" circle @click="deleteApp(row)" />
                     </template>
                 </el-table-column>
@@ -54,8 +54,8 @@ import useLayoutStore from '@/store/modules/layout';
 import { useRouter } from 'vue-router'
 import { ElNotification } from 'element-plus';
 import functionStore from '@/store/modules/function'
-import request from '@/utils/request';
-import useUserStore from '@/store/modules/user';
+// import request from '@/utils/request';
+// import useUserStore from '@/store/modules/user';
 const fs = require('fs');
 const path = require('path')
 const { exec } = require('child_process');
@@ -148,30 +148,61 @@ const editApp = (row: any) => {
     functionStore().recoverState()
     $router.push('edit')
 }
-const uploadApp = (row: any) => {
+// const uploadApp = (row: any) => {
 
-    // 创建 FormData 对象，并将文件添加到其中
-    const formDataPy = new FormData();
-    formDataPy.append('file', `${row.path}.py`);
-    const formDataId = new FormData();
-    formDataId.append('file', `${row.path}currentId.json`);
-    const formDataCodes = new FormData();
-    formDataCodes.append('file', `${row.path}codes.json`);
-    const formDataCodeList = new FormData();
-    formDataCodeList.append('file', `${row.path}codeList.json`);
-    const formDataDescription = new FormData();
-    const fileDescription =new Blob(fs.readFileSync(`${row.folderPath}/description.txt`));
-    formDataDescription.append('file', fileDescription,'description.txt')
-    formDataDescription.append('folderName', row.name)
-    formDataDescription.append('uploader', useUserStore().username)
-    // 使用 Axios 发送 POST 请求
-    request.post('/file/upload', formDataDescription, {
-        headers: {
-            'Content-Type': 'multipart/form-data'
-        }
-    })
+//     // 创建 FormData 对象，并将文件添加到其中
+//     const formDataPy = new FormData();
+//     formDataPy.append('file', `${row.path}.py`);
+//     const formDataId = new FormData();
+//     formDataId.append('file', `${row.path}currentId.json`);
+//     const formDataCodes = new FormData();
+//     formDataCodes.append('file', `${row.path}codes.json`);
+//     const formDataCodeList = new FormData();
+//     formDataCodeList.append('file', `${row.path}codeList.json`);
+//     const formDataDescription = new FormData();
+//     const fileDescription =new Blob(fs.readFileSync(`${row.folderPath}/description.txt`));
+//     formDataDescription.append('file', fileDescription,'description.txt')
+//     formDataDescription.append('folderName', row.name)
+//     formDataDescription.append('uploader', useUserStore().username)
+//     uploadFile(`${row.folderPath}/description.txt`,row.name,'description.txt')
+//     // 使用 Axios 发送 POST 请求
+//     // request.post('/file/upload', formDataDescription, {
+//     //     headers: {
+//     //         'Content-Type': 'multipart/form-data'
+//     //     }
+//     // })
+// }
 
-}
+// const uploadFile = async (filePath:string,folderName:string,fileName:string) => {
+//   try {
+//     // 检查文件是否存在
+//     if (!fs.existsSync(filePath)) {
+//       throw new Error('文件不存在');
+//     }
+
+//     // 创建一个 FormData 实例
+//     const form = new FormData();
+
+//     // 将文件添加到 FormData
+//     const fileContent =fs.createReadStream(filePath);
+//     form.append('file', fileContent);
+
+//     // 发送 POST 请求，包含文件数据
+//     const response = await request.post(`/file/upload?folderName=${folderName}&fileName=${fileName}`, form, {
+//       headers: {
+//         'Content-Type': 'multipart/form-data'
+//       },
+//     });
+//     console.log(response.data);
+//     ElNotification({
+//             type: 'success',
+//             message: '上传成功'
+//         })
+    
+//   } catch (error) {
+//     console.error('文件上传失败:', error);
+//   }
+// };
 const playApp = (pythonFilePath: string) => {
     // 构建要执行的命令
     const command = `python ${pythonFilePath}.py`;
